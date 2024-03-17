@@ -14,6 +14,10 @@ config/name="AssetTools"
 config/features=PackedStringArray("4.2", "C#", "Forward Plus")
 config/icon="res://icon.svg"
 
+[autoload]
+
+PluginLoader="*res://Editor/PluginLoader.cs"
+
 [dotnet]
 
-project/assembly_name="AssetConverter"
+project/assembly_name="AssetTools"

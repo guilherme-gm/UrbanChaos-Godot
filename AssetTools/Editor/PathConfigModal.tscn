@@ -1,0 +1,73 @@
+[gd_scene load_steps=2 format=3 uid="uid://cueug1nnt7xvy"]
+
+[ext_resource type="Script" path="res://Editor/PathConfigModal.cs" id="1_lkj2v"]
+
+[node name="PathConfigModal" type="PopupPanel" node_paths=PackedStringArray("UCFolder", "WorkFolder")]
+title = "Path config"
+initial_position = 4
+size = Vector2i(848, 578)
+visible = true
+exclusive = true
+borderless = false
+extend_to_title = true
+keep_title_visible = true
+script = ExtResource("1_lkj2v")
+UCFolder = NodePath("VBoxContainer/GridContainer/Input_UC_Folder")
+WorkFolder = NodePath("VBoxContainer/GridContainer/Input_Work_Folder")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 844.0
+offset_bottom = 574.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Description" type="Label" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 25)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Configuration for paths used by the Asset Converter. This UI is meant for developers using the Godot Project."
+autowrap_mode = 2
+
+[node name="GridContainer" type="GridContainer" parent="VBoxContainer"]
+layout_mode = 2
+columns = 2
+
+[node name="Lbl_UC_Folder" type="Label" parent="VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Urban Chaos Folder:"
+
+[node name="Input_UC_Folder" type="LineEdit" parent="VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "test"
+
+[node name="Lbl_Work_Folder" type="Label" parent="VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Editor/Temp folder:"
+
+[node name="Input_Work_Folder" type="LineEdit" parent="VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "test2"
+
+[node name="ButtonsContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 10
+
+[node name="Save" type="Button" parent="VBoxContainer/ButtonsContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_horizontal = 6
+text = "Save"
+
+[node name="Cancel" type="Button" parent="VBoxContainer/ButtonsContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_horizontal = 6
+text = "Cancel"
+
+[connection signal="close_requested" from="." to="." method="OnCancelButtonPressed"]
+[connection signal="pressed" from="VBoxContainer/ButtonsContainer/Save" to="." method="OnSaveButtonPressed"]
+[connection signal="pressed" from="VBoxContainer/ButtonsContainer/Cancel" to="." method="OnCancelButtonPressed"]
