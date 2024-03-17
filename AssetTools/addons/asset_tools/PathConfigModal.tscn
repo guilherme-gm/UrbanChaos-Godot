@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://cueug1nnt7xvy"]
 
-[ext_resource type="Script" path="res://Editor/PathConfigModal.cs" id="1_lkj2v"]
+[ext_resource type="Script" path="res://addons/asset_tools/PathConfigModal.cs" id="1_lkj2v"]
 
 [node name="PathConfigModal" type="PopupPanel" node_paths=PackedStringArray("UCFolder", "WorkFolder")]
 title = "Path config"

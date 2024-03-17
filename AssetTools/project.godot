@@ -14,10 +14,10 @@ config/name="AssetTools"
 config/features=PackedStringArray("4.2", "C#", "Forward Plus")
 config/icon="res://icon.svg"
 
-[autoload]
-
-PluginLoader="*res://Editor/PluginLoader.cs"
-
 [dotnet]
 
 project/assembly_name="AssetTools"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/asset_tools/plugin.cfg")

@@ -1,11 +1,10 @@
 #if TOOLS
-
 using Godot;
 
-namespace AssetTools.Editor;
+namespace AssetTools.Addons.Asset_Tools;
 
 [Tool]
-public partial class PluginLoader : EditorPlugin
+public partial class Plugin : EditorPlugin
 {
 	private Control AssetMenuControl = null;
 
@@ -21,5 +20,4 @@ public partial class PluginLoader : EditorPlugin
 		this.AssetMenuControl.Free();
 	}
 }
-
 #endif

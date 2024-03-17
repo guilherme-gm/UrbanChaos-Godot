@@ -1,15 +1,15 @@
 using Godot;
 
-namespace AssetTools.Editor;
+namespace AssetTools.Addons.Asset_Tools;
 
 [Tool]
 public static class Constants
 {
 	public static class Scenes
 	{
-		public static readonly StringName AssetToolsMenu = "res://Editor/AssetToolsMenu.tscn";
+		public static readonly StringName AssetToolsMenu = "res://addons/asset_tools/AssetToolsMenu.tscn";
 
-		public static readonly StringName PathConfigModal = "res://Editor/PathConfigModal.tscn";
+		public static readonly StringName PathConfigModal = "res://addons/asset_tools/PathConfigModal.tscn";
 	}
 
 	public static class Config

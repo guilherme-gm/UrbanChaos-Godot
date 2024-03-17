@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://vbgsb2a7am84"]
 
-[ext_resource type="Script" path="res://Editor/AssetToolsMenu.cs" id="1_mqhif"]
+[ext_resource type="Script" path="res://addons/asset_tools/AssetToolsMenu.cs" id="1_mqhif"]
 
 [node name="UC Asset Tools" type="VBoxContainer"]
 anchors_preset = 15

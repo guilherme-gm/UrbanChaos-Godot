@@ -1,12 +1,12 @@
 #if TOOLS
 
 using Godot;
-using static AssetTools.Editor.Constants;
+using static AssetTools.Addons.Asset_Tools.Constants;
 
-namespace AssetTools.Editor;
+namespace AssetTools.Addons.Asset_Tools;
 
 [Tool]
-public partial class PathConfigModal : Window
+public partial class PathConfigModal : PopupPanel
 {
 	[Export]
 	private LineEdit UCFolder;

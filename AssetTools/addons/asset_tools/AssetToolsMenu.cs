@@ -2,7 +2,7 @@
 
 using Godot;
 
-namespace AssetTools.Editor;
+namespace AssetTools.Addons.Asset_Tools;
 
 [Tool]
 public partial class AssetToolsMenu : VBoxContainer
