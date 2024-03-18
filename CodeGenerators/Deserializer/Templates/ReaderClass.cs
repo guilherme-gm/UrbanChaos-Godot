@@ -16,7 +16,7 @@ partial class {{ClassName}}
 	{
 		var value = new {{ClassName}}();
 
-		{{Code}}
+{{Code}}
 
 		return value;
 	}
