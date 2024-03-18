@@ -1,6 +1,6 @@
 using Deserializer.Templates;
 
-namespace CodeGenerators.Deserializer.Templates;
+namespace CodeGenerators.Deserializer.DataReaders;
 
 public class FixedLenStringReader : IReader
 {

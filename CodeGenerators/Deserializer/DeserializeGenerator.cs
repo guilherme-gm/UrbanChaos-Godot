@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using CodeGenerators.Deserializer.Templates;
+using CodeGenerators.Deserializer.DataReaders;
 using Deserializer.Templates;
 using Microsoft.CodeAnalysis;
 using Stubble.Core.Builders;

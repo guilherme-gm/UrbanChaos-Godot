@@ -1,4 +1,4 @@
-namespace CodeGenerators.Deserializer.Templates;
+namespace CodeGenerators.Deserializer.DataReaders;
 
 public interface IReader
 {

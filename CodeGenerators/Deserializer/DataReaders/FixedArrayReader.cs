@@ -1,7 +1,7 @@
 using Deserializer.Templates;
 using System.Text;
 
-namespace CodeGenerators.Deserializer.Templates;
+namespace CodeGenerators.Deserializer.DataReaders;
 
 public class FixedArrayReader : IReader
 {
