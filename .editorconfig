@@ -30,6 +30,7 @@ dotnet_diagnostic.IDE0046.severity = silent # Use ternary for returns, not ifs
 
 # https://github.com/dotnet/aspnetcore/issues/47912
 dotnet_diagnostic.IDE0005.severity = none # Remove unnecessary using directives (using CS8019 instead)
+dotnet_diagnostic.IDE0270.severity = none # Disable "Null check can be simplified" with coalescing, this is confusing
 dotnet_diagnostic.CS8019.severity = error # Remove unnecessary using directives
  
 # Here we set some rules for unused codes (classes, methods, parameters, etc.)
@@ -41,6 +42,7 @@ dotnet_diagnostic.CA1823.severity = error # Avoid unused private fields
 #### .NET Coding Conventions ####
 
 csharp_new_line_before_open_brace=types # Only class/struct declarations uses { } in new lines
+csharp_new_line_before_else = false # Allow } else {
 
 # Organize usings
 dotnet_separate_import_directive_groups = false
