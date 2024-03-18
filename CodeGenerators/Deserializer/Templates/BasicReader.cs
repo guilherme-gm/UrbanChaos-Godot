@@ -19,8 +19,6 @@ public class BasicReader : IReader
 	}
 
 	public string GetTemplate() {
-		return @"
-value.{{FieldName}} = {{ReadingCall}};
-";
+		return @"value.{{FieldName}} = {{ReadingCall}};";
 	}
 }

@@ -14,10 +14,15 @@ public class DeserializeGenerator : ISourceGenerator
 {
 	private readonly Stubble.Core.StubbleVisitorRenderer Stubble = new StubbleBuilder().Build();
 
+	private readonly StringBuilder InitialSource = new StringBuilder()
+		.AppendLine("using System;")
+		.AppendLine("namespace Deserializer;");
+
 	public void Initialize(GeneratorInitializationContext context) {
-		context.AddInitialSourcePart(DeserializeGeneratorAttribute.Template, null);
-		context.AddInitialSourcePart(NestedAttribute.Template, null);
-		context.FinishInitialSource("DeserializerAttributes.g.cs");
+		this.AddInitialSourcePart(DeserializeGeneratorAttribute.Template, null);
+		this.AddInitialSourcePart(FixedArrayAttribute.Template, null);
+		this.AddInitialSourcePart(NestedAttribute.Template, null);
+		this.FinishInitialSource(context, "DeserializerAttributes.g.cs");
 
 		context.RegisterForSyntaxNotifications(() => new DeserializerSyntaxReceiver());
 	}
@@ -28,12 +33,27 @@ public class DeserializeGenerator : ISourceGenerator
 
 		foreach (var targetClass in receiver.TargetClasses) {
 			var generatorParams = this.GenerateDeserializeClass(targetClass);
-			context.AddSourceFromTemplate(
+			this.AddSourceFromTemplate(
+				context,
 				$"{generatorParams.ClassName}_deserialize.g",
 				ReaderClass.Template,
 				generatorParams
 			);
 		}
+	}
+
+	private void AddInitialSourcePart(string template, object data) {
+		var codeToAdd = this.Stubble.Render(template, data);
+		_ = this.InitialSource.AppendLine(codeToAdd);
+	}
+
+	private void FinishInitialSource(GeneratorInitializationContext context, string fileName) {
+		context.RegisterForPostInitialization((i) => i.AddSource(fileName, this.InitialSource.ToString()));
+	}
+
+	private void AddSourceFromTemplate(GeneratorExecutionContext context, string fileName, string template, object data) {
+		var codeToAdd = this.Stubble.Render(template, data);
+		context.AddSource(fileName, codeToAdd);
 	}
 
 	private string FormatLines(string code) {
@@ -55,9 +75,15 @@ public class DeserializeGenerator : ISourceGenerator
 
 		StringBuilder sb = new StringBuilder();
 		foreach (var prop in fields) {
-			var reader = new BasicReader(prop);
+			IReader reader;
+			if (AttributeUtils.HasAttribute(prop.FieldSymbol, FixedArrayAttribute.Name)) {
+				reader = new FixedArrayReader(prop);
+			} else {
+				reader = new BasicReader(prop);
+			}
+
 			var readerCode = this.Stubble.Render(reader.GetTemplate(), reader);
-			sb.AppendLine(this.FormatLines(readerCode));
+			_ = sb.AppendLine(this.FormatLines(readerCode));
 		}
 
 		return sb.ToString();
