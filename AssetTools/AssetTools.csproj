@@ -1,15 +1,23 @@
 <Project Sdk="Godot.NET.Sdk/4.2.1">
 	<PropertyGroup>
-		<TargetFramework>net6.0</TargetFramework>
+		<TargetFramework>net8.0</TargetFramework>
 		<TargetFramework Condition=" '$(GodotTargetPlatform)' == 'android' ">net7.0</TargetFramework>
 		<TargetFramework Condition=" '$(GodotTargetPlatform)' == 'ios' ">net8.0</TargetFramework>
 		<EnableDynamicLoading>true</EnableDynamicLoading>
 		<RootNamespace>AssetTools</RootNamespace>
+		<EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
+		<CompilerGeneratedFilesOutputPath>GeneratedFiles</CompilerGeneratedFilesOutputPath>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<CompilerVisibleProperty Include="RootNamespace" />
 		<CompilerVisibleProperty Include="ProjectDir" />
+	</ItemGroup>
+
+	<!-- Add this as a new ItemGroup, replacing paths and names appropriately -->
+	<ItemGroup>
+		<ProjectReference Include="..\CodeGenerators\CodeGenerators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+		<Compile Remove="GeneratedFiles/**/*.cs" />
 	</ItemGroup>
 
 </Project>
