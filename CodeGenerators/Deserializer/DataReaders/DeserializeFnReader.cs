@@ -18,6 +18,6 @@ public class DeserializeFnReader : IReader
 	}
 
 	public string GetTemplate() {
-		return @"value.{{FieldName}} = {{ClassName}.{{FunctionName}}(value, br);";
+		return @"value.{{FieldName}} = {{ClassName}}.{{FunctionName}}(value, br);";
 	}
 }

@@ -27,10 +27,10 @@ sealed class DeserializeFnAttribute : Attribute
 			throw new Exception($"Could not find attribute {Name}");
 		}
 
-		var propertyName = AttributeUtils.GetAttributeField<string>(attributeData, nameof(FnName));
+		var fnName = AttributeUtils.GetAttributeField<string>(attributeData, nameof(FnName));
 
 		return new DeserializeFnAttribute() {
-			FnName = propertyName,
+			FnName = fnName,
 		};
 	}
 }
