@@ -12,7 +12,12 @@ namespace CodeGenerators.Deserializer;
 [Generator]
 public class DeserializeGenerator : ISourceGenerator
 {
-	private readonly Stubble.Core.StubbleVisitorRenderer Stubble = new StubbleBuilder().Build();
+	private readonly Stubble.Core.StubbleVisitorRenderer Stubble = new StubbleBuilder()
+		.Configure(settings => {
+			// Disable encoding, this is meant for HTML, and we are doing C# code here...
+			_ = settings.SetEncodingFunction(val => val);
+		})
+		.Build();
 
 	private readonly StringBuilder InitialSource = new StringBuilder()
 		.AppendLine("using System;")
@@ -21,6 +26,7 @@ public class DeserializeGenerator : ISourceGenerator
 	public void Initialize(GeneratorInitializationContext context) {
 		this.AddInitialSourcePart(DeserializeGeneratorAttribute.Template, null);
 		this.AddInitialSourcePart(FixedArrayAttribute.Template, null);
+		this.AddInitialSourcePart(FixedLenStringAttribute.Template, null);
 		this.AddInitialSourcePart(NestedAttribute.Template, null);
 		this.FinishInitialSource(context, "DeserializerAttributes.g.cs");
 
@@ -76,7 +82,9 @@ public class DeserializeGenerator : ISourceGenerator
 		StringBuilder sb = new StringBuilder();
 		foreach (var prop in fields) {
 			IReader reader;
-			if (AttributeUtils.HasAttribute(prop.FieldSymbol, FixedArrayAttribute.Name)) {
+			if (AttributeUtils.HasAttribute(prop.FieldSymbol, FixedLenStringAttribute.Name)) {
+				reader = new FixedLenStringReader(prop);
+			} else if (AttributeUtils.HasAttribute(prop.FieldSymbol, FixedArrayAttribute.Name)) {
 				reader = new FixedArrayReader(prop);
 			} else {
 				reader = new BasicReader(prop);
