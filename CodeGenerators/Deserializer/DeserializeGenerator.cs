@@ -125,7 +125,7 @@ public class DeserializeGenerator : ISourceGenerator
 		}
 
 		templateParams.ClassName = className;
-		templateParams.Namespace = classNamespace != "" ? $"namespace {classNamespace}" : "";
+		templateParams.Namespace = classNamespace != "" ? $"namespace {classNamespace};" : "";
 		templateParams.Code = this.GenerateDeserializeCode(className, c);
 
 		return templateParams;
