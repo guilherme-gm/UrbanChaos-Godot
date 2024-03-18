@@ -25,6 +25,7 @@ public class DeserializeGenerator : ISourceGenerator
 
 	public void Initialize(GeneratorInitializationContext context) {
 		this.AddInitialSourcePart(DeserializeGeneratorAttribute.Template, null);
+		this.AddInitialSourcePart(DeserializeFnAttribute.Template, null);
 		this.AddInitialSourcePart(FixedArrayAttribute.Template, null);
 		this.AddInitialSourcePart(FixedLenStringAttribute.Template, null);
 		this.AddInitialSourcePart(NestedAttribute.Template, null);
@@ -71,7 +72,7 @@ public class DeserializeGenerator : ISourceGenerator
 		);
 	}
 
-	private string GenerateDeserializeCode(INamedTypeSymbol c) {
+	private string GenerateDeserializeCode(string className, INamedTypeSymbol c) {
 		var fields = new List<FieldDescriptor>();
 
 		foreach (var member in c.GetMembers()) {
@@ -94,6 +95,8 @@ public class DeserializeGenerator : ISourceGenerator
 				reader = new FixedLenStringReader(prop);
 			} else if (AttributeUtils.HasAttribute(prop.FieldSymbol, FixedArrayAttribute.Name)) {
 				reader = new FixedArrayReader(prop);
+			} else if (AttributeUtils.HasAttribute(prop.FieldSymbol, DeserializeFnAttribute.Name)) {
+				reader = new DeserializeFnReader(className, prop);
 			} else {
 				reader = new BasicReader(prop);
 			}
@@ -117,7 +120,7 @@ public class DeserializeGenerator : ISourceGenerator
 
 		templateParams.ClassName = className;
 		templateParams.Namespace = classNamespace != "" ? $"namespace {classNamespace}" : "";
-		templateParams.Code = this.GenerateDeserializeCode(c);
+		templateParams.Code = this.GenerateDeserializeCode(className, c);
 
 		return templateParams;
 	}
