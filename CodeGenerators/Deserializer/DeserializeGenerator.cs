@@ -24,6 +24,7 @@ public class DeserializeGenerator : ISourceGenerator
 		.AppendLine("namespace Deserializer;");
 
 	public void Initialize(GeneratorInitializationContext context) {
+		this.AddInitialSourcePart(ConditionAttribute.Template, null);
 		this.AddInitialSourcePart(DeserializeGeneratorAttribute.Template, null);
 		this.AddInitialSourcePart(DeserializeFnAttribute.Template, null);
 		this.AddInitialSourcePart(FixedArrayAttribute.Template, null);
@@ -102,6 +103,11 @@ public class DeserializeGenerator : ISourceGenerator
 			}
 
 			var readerCode = this.Stubble.Render(reader.GetTemplate(), reader);
+			if (AttributeUtils.HasAttribute(prop.FieldSymbol, ConditionAttribute.Name)) {
+				var conditionReader = new ConditionReader(prop, readerCode);
+				readerCode = this.Stubble.Render(conditionReader.GetTemplate(), conditionReader);
+			}
+
 			_ = sb.AppendLine(this.FormatLines(readerCode));
 		}
 
