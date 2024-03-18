@@ -1,5 +1,6 @@
 #if TOOLS
 
+using AssetTools.AssetManagers;
 using Godot;
 using static AssetTools.Addons.Asset_Tools.Constants;
 
@@ -24,6 +25,8 @@ public partial class PathConfigModal : PopupPanel
 		var settings = EditorInterface.Singleton.GetEditorSettings();
 		settings.SetProjectMetadata(Config.Section, Config.UCPathKey, this.UCFolder.Text.Trim());
 		settings.SetProjectMetadata(Config.Section, Config.WorkPathKey, this.WorkFolder.Text.Trim());
+
+		AssetPathManager.Instance.ReloadPath();
 
 		this.QueueFree();
 	}

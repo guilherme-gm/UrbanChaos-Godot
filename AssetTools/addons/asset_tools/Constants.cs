@@ -10,6 +10,8 @@ public static class Constants
 		public static readonly StringName AssetToolsMenu = "res://addons/asset_tools/AssetToolsMenu.tscn";
 
 		public static readonly StringName PathConfigModal = "res://addons/asset_tools/PathConfigModal.tscn";
+
+		public static readonly StringName AssetToolMain = "res://addons/asset_tools/AssetToolMain.tscn";
 	}
 
 	public static class Config
