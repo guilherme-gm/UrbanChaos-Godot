@@ -29,6 +29,7 @@ public class DeserializeGenerator : ISourceGenerator
 		this.AddInitialSourcePart(FixedLenStringAttribute.Template, null);
 		this.AddInitialSourcePart(NestedAttribute.Template, null);
 		this.AddInitialSourcePart(SkipAttribute.Template, null);
+		this.AddInitialSourcePart(VariableSizedArrayAttribute.Template, null);
 		this.FinishInitialSource(context, "DeserializerAttributes.g.cs");
 
 		context.RegisterForSyntaxNotifications(() => new DeserializerSyntaxReceiver());
@@ -87,7 +88,9 @@ public class DeserializeGenerator : ISourceGenerator
 			}
 
 			IReader reader;
-			if (AttributeUtils.HasAttribute(prop.FieldSymbol, FixedLenStringAttribute.Name)) {
+			if (AttributeUtils.HasAttribute(prop.FieldSymbol, VariableSizedArrayAttribute.Name)) {
+				reader = new VariableSizedArrayReader(prop);
+			} else if (AttributeUtils.HasAttribute(prop.FieldSymbol, FixedLenStringAttribute.Name)) {
 				reader = new FixedLenStringReader(prop);
 			} else if (AttributeUtils.HasAttribute(prop.FieldSymbol, FixedArrayAttribute.Name)) {
 				reader = new FixedArrayReader(prop);
