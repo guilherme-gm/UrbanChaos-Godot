@@ -41,7 +41,9 @@ public class FixedArrayReader : IReader
 			}
 			_ = sb.AppendLine($"{this.ReadingCall}");
 		} else {
-			_ = sb.Append(this.GetReadCode(depth + 1));
+			for (int i = 0; i < this.Dimensions[depth]; i++) {
+				_ = sb.Append(this.GetReadCode(depth + 1));
+			}
 		}
 
 		if (depth > 0)
