@@ -1,5 +1,6 @@
 using AssetTools.AssetManagers;
 using Godot;
+using System.Collections.Generic;
 
 [Tool]
 public partial class TextureClumpsPage : VBoxContainer
@@ -13,27 +14,62 @@ public partial class TextureClumpsPage : VBoxContainer
 	[Export]
 	private TextureRect TgaDisplay { get; set; }
 
+	[Export]
+	private LineEdit SearchTxt { get; set; }
+
+	private Dictionary<string, List<string>> TreeData { get; set; }
+
 	public override void _Ready() {
 		this.ReloadTextureList();
+		this.DrawFileTree();
 	}
 
 	public void ReloadTextureList() {
-		this.FileTree.Clear();
-		var treeRoot = this.FileTree.CreateItem(null);
+		this.TreeData = [];
 
 		var clumpList = TextureManager.Instance.ListClumps();
 		foreach (var clump in clumpList) {
-			var clumpNode = this.FileTree.CreateItem(treeRoot);
-			clumpNode.SetText(0, clump);
+			var files = new List<string>();
+			this.TreeData.Add(clump, files);
 
 			var clumpFiles = TextureManager.Instance.ListClumpFiles(clump);
 			foreach (var clumpFile in clumpFiles) {
+				files.Add(clumpFile);
+			}
+		}
+	}
+
+	private void DrawFileTree() {
+		this.FileTree.Clear();
+
+		var treeRoot = this.FileTree.CreateItem(null);
+		foreach (var clump in this.TreeData.Keys) {
+			var clumpNode = this.FileTree.CreateItem(treeRoot);
+			clumpNode.SetText(0, clump);
+
+			foreach (var clumpFile in this.TreeData[clump]) {
 				var fileNode = this.FileTree.CreateItem(clumpNode);
 				fileNode.SetText(0, clumpFile);
 				fileNode.SetMetadata(0, $"{clump}|{clumpFile}");
 			}
 
 			clumpNode.Collapsed = true;
+		}
+	}
+
+	private void DrawSearchTree(string query) {
+		this.FileTree.Clear();
+
+		var treeRoot = this.FileTree.CreateItem(null);
+		foreach (var clump in this.TreeData.Keys) {
+			foreach (var clumpFile in this.TreeData[clump]) {
+				var label = $"{clump}/{clumpFile}";
+				if (label.Contains(query)) {
+					var fileNode = this.FileTree.CreateItem(treeRoot);
+					fileNode.SetText(0, label);
+					fileNode.SetMetadata(0, $"{clump}|{clumpFile}");
+				}
+			}
 		}
 	}
 
@@ -49,6 +85,22 @@ public partial class TextureClumpsPage : VBoxContainer
 		this.ExtractAllButton.Disabled = false;
 
 		this.ReloadTextureList();
+	}
+
+	public void OnRefreshBtnClicked() {
+		this.ReloadTextureList();
+		this.SearchTxt.Text = "";
+		this.DrawFileTree();
+	}
+
+	public void OnSearchBtnClicked() {
+		var query = this.SearchTxt.Text;
+
+		if (query == "") {
+			this.DrawFileTree();
+		} else {
+			this.DrawSearchTree(query);
+		}
 	}
 
 	public void OnTreeItemSelected() {
