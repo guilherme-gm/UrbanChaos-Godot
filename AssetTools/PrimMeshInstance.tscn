@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://ctwgk0x0cqjv7"]
+
+[ext_resource type="Script" path="res://PrimMeshInstance.cs" id="1_c254y"]
+
+[node name="PrimMeshInstance" type="MeshInstance3D"]
+script = ExtResource("1_c254y")
