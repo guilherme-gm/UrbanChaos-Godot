@@ -28,7 +28,8 @@ to have the original game again (if we need to reconvert something).
 
 
 ## Project structure
-TODO:
+1. **AssetTools:** Godot project to manage the original game assets (and eventually convert it). Contains some Editor tools to make it easier to analyze data.
+2. **CodeGenerators:** C# Source Generators to support other projects.
 
 
 ## How to play
