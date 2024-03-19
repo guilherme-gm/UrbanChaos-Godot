@@ -17,6 +17,9 @@ public partial class PrimsPage : VBoxContainer
 	[Export]
 	private Camera3D Camera { get; set; }
 
+	[Export]
+	private OptionButton TextureSetOptions { get; set; }
+
 	private PrimsManager.PrimFileInfo[] PrimFileInfo { get; set; }
 
 	private Vector3 LookAtPos { get; set; }
@@ -27,7 +30,22 @@ public partial class PrimsPage : VBoxContainer
 	}
 
 	public void ReloadTextureList() {
+		this.LoadTextureSets();
 		this.PrimFileInfo = PrimsManager.Instance.ListPrims();
+	}
+
+	private void LoadTextureSets() {
+		this.TextureSetOptions.Clear();
+		this.TextureSetOptions.AddItem("None", 0);
+		this.TextureSetOptions.SetItemMetadata(0, "");
+
+		int id = 1;
+		var clumps = TextureManager.Instance.ListClumps();
+		foreach (var clumpName in clumps) {
+			this.TextureSetOptions.AddItem(clumpName, id);
+			this.TextureSetOptions.SetItemMetadata(id, clumpName);
+			id++;
+		}
 	}
 
 	private void DrawFileTree(string query = "") {
@@ -70,7 +88,7 @@ public partial class PrimsPage : VBoxContainer
 		this.Camera.LookAtFromPosition(this.LookAtPos - (Vector3.Back * longSize * 2), this.LookAtPos);
 	}
 
-	public void OnTreeItemSelected() {
+	private void Render() {
 		var item = this.FileTree.GetSelected();
 		var fileName = item.GetMetadata(0).AsString();
 
@@ -79,8 +97,17 @@ public partial class PrimsPage : VBoxContainer
 			return;
 		}
 
-		this.PrimMesh.LoadPrim(PrimsManager.GetUCPrimPath(fileName));
+		var textureSet = this.TextureSetOptions.GetSelectedMetadata().AsString();
+		this.PrimMesh.LoadPrim(PrimsManager.GetUCPrimPath(fileName), textureSet);
 		this.PrimMesh.Visible = true;
 		this.ResetView();
+	}
+
+	public void OnTreeItemSelected() {
+		this.Render();
+	}
+
+	public void OnTextureSetChanged(int option) {
+		this.Render();
 	}
 }

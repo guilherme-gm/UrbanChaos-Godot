@@ -1,7 +1,9 @@
+using AssetTools.AssetManagers;
 using AssetTools.UCFileStructures.Prim;
 using Godot;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace AssetTools;
 
@@ -9,6 +11,8 @@ namespace AssetTools;
 public partial class PrimMeshInstance : MeshInstance3D
 {
 	private string PrimFilePath;
+
+	private Dictionary<int, Material> Materials { get; set; }
 
 	[Export(PropertyHint.GlobalFile)]
 	public string PrimPath {
@@ -53,8 +57,10 @@ public partial class PrimMeshInstance : MeshInstance3D
 			triangleSurfaces[(int)Mesh.ArrayType.Index] = triangleIndices.ToArray();
 
 			arrMesh.AddSurfaceFromArrays(Mesh.PrimitiveType.Triangles, triangleSurfaces);
-			// var textureHolder = this.Textures.First((v) => v.IdVal == face.RealPage);
-			// arrMesh.SurfaceSetMaterial(idx, textureHolder.TextureVal);
+			var material = this.Materials?.GetValueOrDefault(face.TexturePage) ?? null;
+			if (material != null) {
+				arrMesh.SurfaceSetMaterial(idx, material);
+			}
 			idx++;
 		}
 
@@ -89,8 +95,10 @@ public partial class PrimMeshInstance : MeshInstance3D
 			rectSurfaces[(int)Mesh.ArrayType.Index] = rectIndices.ToArray();
 
 			arrMesh.AddSurfaceFromArrays(Mesh.PrimitiveType.TriangleStrip, rectSurfaces);
-			// var textureHolder = this.Textures.First((v) => v.IdVal == face.RealPage);
-			// arrMesh.SurfaceSetMaterial(idx, textureHolder.TextureVal);
+			var material = this.Materials?.GetValueOrDefault(face.TexturePage) ?? null;
+			if (material != null) {
+				arrMesh.SurfaceSetMaterial(idx, material);
+			}
 			idx++;
 		}
 
@@ -107,7 +115,38 @@ public partial class PrimMeshInstance : MeshInstance3D
 		this.Mesh = arrMesh;
 	}
 
-	public void LoadPrim(string path) {
+	private void LoadMaterials(IPrim prim, string textureSet) {
+		this.Materials = [];
+		var textures = prim.PrimFace3s
+			.Select((face) => face.TexturePage)
+			.Concat(prim.PrimFace4s.Select((face) => face.TexturePage))
+			.Distinct();
+
+		foreach (var textureId in textures) {
+			var texturePath = TextureManager.GetWorkDirPath(textureSet, $"tex{textureId.ToString().PadLeft(3, '0')}.tga");
+			if (!File.Exists(texturePath)) {
+				GD.PushWarning($"Could not find texture: ${texturePath}");
+				continue;
+			}
+
+			var image = new Image();
+			if (image.Load(texturePath) != Error.Ok) {
+				GD.PushError("Failed to load image");
+				continue;
+			}
+
+			var texture = new ImageTexture();
+			texture.SetImage(image);
+
+			var material = new StandardMaterial3D {
+				AlbedoTexture = texture
+			};
+
+			this.Materials.Add(textureId, material);
+		}
+	}
+
+	public void LoadPrim(string path, string textureSet = "") {
 		if (path == "") {
 			return;
 		}
@@ -125,6 +164,12 @@ public partial class PrimMeshInstance : MeshInstance3D
 			prim = PrimFile.Deserialize(br);
 		} else {
 			throw new System.Exception($"Could not identify file type for {fileName}");
+		}
+
+		if (textureSet != "") {
+			this.LoadMaterials(prim, textureSet);
+		} else {
+			this.Materials = null;
 		}
 
 		this.DrawPrim(prim);
