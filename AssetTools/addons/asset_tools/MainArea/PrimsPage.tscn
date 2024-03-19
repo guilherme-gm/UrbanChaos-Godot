@@ -1,0 +1,74 @@
+[gd_scene load_steps=3 format=3 uid="uid://wsfkt4vsrxv0"]
+
+[ext_resource type="Script" path="res://addons/asset_tools/MainArea/PrimsPage.cs" id="1_gajev"]
+[ext_resource type="PackedScene" uid="uid://ctwgk0x0cqjv7" path="res://PrimMeshInstance.tscn" id="2_fs1ty"]
+
+[node name="Prims" type="VBoxContainer" node_paths=PackedStringArray("FileTree", "SearchTxt", "PrimMesh", "Camera")]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_gajev")
+FileTree = NodePath("TextureSetsPage/Tree")
+SearchTxt = NodePath("HBoxContainer/SearchTxt")
+PrimMesh = NodePath("TextureSetsPage/PanelContainer/VBoxContainer/SubViewportContainer/SubViewport/PrimMeshInstance")
+Camera = NodePath("TextureSetsPage/PanelContainer/VBoxContainer/SubViewportContainer/SubViewport/Camera3D")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="RefreshBtn" type="Button" parent="HBoxContainer"]
+layout_mode = 2
+text = "Refresh"
+
+[node name="SearchLbl" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Search:
+"
+horizontal_alignment = 2
+
+[node name="SearchTxt" type="LineEdit" parent="HBoxContainer"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+
+[node name="BtnSearch" type="Button" parent="HBoxContainer"]
+layout_mode = 2
+text = "Go"
+
+[node name="TextureSetsPage" type="HSplitContainer" parent="."]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Tree" type="Tree" parent="TextureSetsPage"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+hide_root = true
+
+[node name="PanelContainer" type="PanelContainer" parent="TextureSetsPage"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="TextureSetsPage/PanelContainer"]
+layout_mode = 2
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="TextureSetsPage/PanelContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="TextureSetsPage/PanelContainer/VBoxContainer/SubViewportContainer"]
+handle_input_locally = false
+size = Vector2i(990, 613)
+render_target_update_mode = 4
+
+[node name="Camera3D" type="Camera3D" parent="TextureSetsPage/PanelContainer/VBoxContainer/SubViewportContainer/SubViewport"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.28854)
+current = true
+
+[node name="PrimMeshInstance" parent="TextureSetsPage/PanelContainer/VBoxContainer/SubViewportContainer/SubViewport" instance=ExtResource("2_fs1ty")]
+visible = false
+
+[connection signal="pressed" from="HBoxContainer/RefreshBtn" to="." method="OnRefreshBtnClicked"]
+[connection signal="pressed" from="HBoxContainer/BtnSearch" to="." method="OnSearchBtnClicked"]
+[connection signal="cell_selected" from="TextureSetsPage/Tree" to="." method="OnTreeItemSelected"]
