@@ -12,11 +12,15 @@ using System.IO;
 
 partial class {{ClassName}}
 {
+	partial void PostDeserialize();
+
 	public static {{ClassName}} Deserialize(BinaryReader br)
 	{
 		var value = new {{ClassName}}();
 
 {{Code}}
+
+		value.PostDeserialize();
 
 		return value;
 	}

@@ -162,3 +162,27 @@ and thus use the C# default value for the data type.
 Simply ignores this field during deserialization.
 
 You may use it when there are fields meant for other purposes and not to describe a file structre.
+
+
+### Hooks
+During deserialization, the following methods are called and may be used to perform additional operations.
+
+#### `void PostDeserialize()` (Instance method)
+Called after `Deserialize` finishes and before it returns. May be used for post processing.
+
+Example:
+```CSharp
+[DeserializeGenerator]
+public partial class MyClass
+{
+	public int Value { get; set; }
+
+	partial void PostDeserialize() {
+		this.Value *= 10;
+	}
+}
+
+// Code somewhere else
+var c = MyClass.Deserialize(br); // Let's image the file had Value = 5
+c.Value; // 50
+```
