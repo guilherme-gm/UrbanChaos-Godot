@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://caidchsiukpc0"]
+[gd_scene load_steps=3 format=3 uid="uid://caidchsiukpc0"]
 
 [ext_resource type="PackedScene" uid="uid://bncaa64mv030s" path="res://addons/asset_tools/MainArea/TextureSetsPage.tscn" id="1_ik3ue"]
+[ext_resource type="PackedScene" uid="uid://urlhp55s57g8" path="res://addons/asset_tools/MainArea/TextureClumpsPage.tscn" id="2_u66f1"]
 
 [node name="AssetToolMain" type="TabContainer"]
 anchors_preset = 15
@@ -11,4 +12,8 @@ grow_vertical = 2
 size_flags_vertical = 3
 
 [node name="Texture Sets (TMA)" parent="." instance=ExtResource("1_ik3ue")]
+layout_mode = 2
+
+[node name="Textures (Clumps TXC)" parent="." instance=ExtResource("2_u66f1")]
+visible = false
 layout_mode = 2
