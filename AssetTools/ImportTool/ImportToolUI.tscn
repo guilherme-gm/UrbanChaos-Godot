@@ -117,6 +117,7 @@ text = "Waiting..."
 
 [node name="ProgressBar" type="ProgressBar" parent="VBoxContainer"]
 layout_mode = 2
+step = 1.0
 
 [node name="LogLabel" type="Label" parent="VBoxContainer"]
 layout_mode = 2
@@ -130,6 +131,7 @@ bbcode_enabled = true
 scroll_following = true
 
 [connection signal="dir_selected" from="FileDialog" to="." method="OnFileDialogDirSelected"]
+[connection signal="file_selected" from="FileDialog" to="." method="OnFileDialogDirSelected"]
 [connection signal="pressed" from="VBoxContainer/GridContainer/GdSearchBtn" to="." method="OnGDSearchBtnPressed"]
 [connection signal="pressed" from="VBoxContainer/GridContainer/UCSearchBtn" to="." method="OnUCSearchBtnPressed"]
 [connection signal="pressed" from="VBoxContainer/GridContainer/UCGodotSearchBtn" to="." method="OnUCGodotSearchBtnPressed"]

@@ -34,17 +34,40 @@ public partial class ImportToolUI : Panel
 
 	public override void _Ready() {
 		this.ImportToolCore = new ImportTool();
-		this.ImportToolCore.OnProgress += (int step, int total) => {
-			_ = this.CallDeferred(nameof(this.OnImportToolCoreProgress), step, total);
+		this.ImportToolCore.OnProgress += (int current, int total) => {
+			_ = this.CallDeferred(nameof(this.OnImportToolCoreProgress), current, total);
 		};
 		this.ImportToolCore.OnProgressLog += (string message) => {
 			_ = this.CallDeferred(nameof(this.OnImportToolCoreProgressLog), message);
 		};
+
+		this.LoadLastConfig();
 	}
 
-	private void OnImportToolCoreProgress(int step, int total) {
+	private void LoadLastConfig() {
+		var config = new ConfigFile();
+		if (config.Load("user://import_tool.cfg") != Error.Ok) {
+			return;
+		}
+
+		this.GDInput.Text = config.GetValue("Paths", "GodotPath").AsString();
+		this.UCInput.Text = config.GetValue("Paths", "UCPath").AsString();
+		this.UCGodotInput.Text = config.GetValue("Paths", "UCGodotPath").AsString();
+	}
+
+	private void SaveConfig() {
+		var config = new ConfigFile();
+
+		config.SetValue("Paths", "GodotPath", this.GDInput.Text);
+		config.SetValue("Paths", "UCPath", this.UCInput.Text);
+		config.SetValue("Paths", "UCGodotPath", this.UCGodotInput.Text);
+
+		_ = config.Save("user://import_tool.cfg");
+	}
+
+	private void OnImportToolCoreProgress(int current, int total) {
 		this.ProgressBar.MaxValue = total;
-		this.ProgressBar.Step = step;
+		this.ProgressBar.Value = current;
 	}
 
 	private void OnImportToolCoreProgressLog(string message) {
@@ -89,6 +112,7 @@ public partial class ImportToolUI : Panel
 
 	private async void OnImportBtnPressed() {
 		try {
+			this.SaveConfig();
 			this.Log.Clear();
 			this.SetImportElementsEnabled(false);
 
