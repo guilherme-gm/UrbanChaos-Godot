@@ -9,7 +9,7 @@ public class TmaManager
 	public static readonly TmaManager Instance = new TmaManager();
 
 	public string[] ListFiles() {
-		var folderPath = Path.Join(AssetPathManager.Instance.UCPath, "server/textures");
+		var folderPath = Path.Join(AssetPathManager.Instance.UCFolderPath, "server/textures");
 		var fileList = Directory
 			.GetFiles(folderPath, "*.tma", SearchOption.AllDirectories)
 			.Select((file) => Path.GetRelativePath(folderPath, file))
@@ -19,7 +19,7 @@ public class TmaManager
 	}
 
 	public StyleTma LoadFile(string path) {
-		var filePath = Path.Join(AssetPathManager.Instance.UCPath, "server/textures", path);
+		var filePath = Path.Join(AssetPathManager.Instance.UCFolderPath, "server/textures", path);
 		using var fs = new FileStream(filePath, FileMode.Open);
 		using var br = new BinaryReader(fs);
 

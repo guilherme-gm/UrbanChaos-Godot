@@ -1,0 +1,136 @@
+[gd_scene load_steps=4 format=3 uid="uid://djchofmcwyd76"]
+
+[ext_resource type="Script" path="res://ImportTool/ImportToolUI.cs" id="1_1equo"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7lr4l"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gr3xu"]
+bg_color = Color(0.470588, 0.470588, 0.470588, 1)
+
+[node name="ImportTool" type="Panel" node_paths=PackedStringArray("FileDialog", "GDInput", "UCInput", "UCGodotInput", "ImportButton", "ProgressLabel", "ProgressBar", "Log")]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_7lr4l")
+script = ExtResource("1_1equo")
+FileDialog = NodePath("FileDialog")
+GDInput = NodePath("VBoxContainer/GridContainer/GdInput")
+UCInput = NodePath("VBoxContainer/GridContainer/UCInput")
+UCGodotInput = NodePath("VBoxContainer/GridContainer/UCGodotInput")
+ImportButton = NodePath("VBoxContainer/HBoxContainer/ImportBtn")
+ProgressLabel = NodePath("VBoxContainer/ProgressText")
+ProgressBar = NodePath("VBoxContainer/ProgressBar")
+Log = NodePath("VBoxContainer/LogContent")
+
+[node name="FileDialog" type="FileDialog" parent="."]
+size = Vector2i(392, 159)
+access = 2
+use_native_dialog = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.021
+anchor_top = 0.025
+anchor_right = 0.979
+anchor_bottom = 0.975
+offset_left = -0.192001
+offset_top = -0.200001
+offset_right = 0.192017
+offset_bottom = 0.200012
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Title" type="Label" parent="VBoxContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "Urban Chaos Godot Asset Import/Convert Tool"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Description" type="Label" parent="VBoxContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "This tool will perform the asset conversion from the original game into the reimplementation.
+Simply setup the paths below and click \"Import\".
+During the process, a folder named \"Temp\" will be created inside UC Godot folder, it will also be automatically removed after it finishes."
+autowrap_mode = 3
+
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+
+[node name="GridContainer" type="GridContainer" parent="VBoxContainer"]
+layout_mode = 2
+columns = 3
+
+[node name="GdLabel" type="Label" parent="VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Godot exe path:"
+
+[node name="GdInput" type="LineEdit" parent="VBoxContainer/GridContainer" groups=["ImportInfoElements"]]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="GdSearchBtn" type="Button" parent="VBoxContainer/GridContainer" groups=["ImportInfoElements"]]
+layout_mode = 2
+text = "..."
+
+[node name="UCLabel" type="Label" parent="VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Original Urban Chaos Folder: (Steam/GOG)"
+
+[node name="UCInput" type="LineEdit" parent="VBoxContainer/GridContainer" groups=["ImportInfoElements"]]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="UCSearchBtn" type="Button" parent="VBoxContainer/GridContainer" groups=["ImportInfoElements"]]
+layout_mode = 2
+text = "..."
+
+[node name="UCGodotLabel" type="Label" parent="VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "UC Godot Folder:"
+
+[node name="UCGodotInput" type="LineEdit" parent="VBoxContainer/GridContainer" groups=["ImportInfoElements"]]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="UCGodotSearchBtn" type="Button" parent="VBoxContainer/GridContainer" groups=["ImportInfoElements"]]
+layout_mode = 2
+text = "..."
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+
+[node name="ImportBtn" type="Button" parent="VBoxContainer/HBoxContainer" groups=["ImportInfoElements"]]
+layout_mode = 2
+text = "Import"
+
+[node name="ProgressText" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "Waiting..."
+
+[node name="ProgressBar" type="ProgressBar" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="LogLabel" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "Log:"
+
+[node name="LogContent" type="RichTextLabel" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/normal = SubResource("StyleBoxFlat_gr3xu")
+bbcode_enabled = true
+scroll_following = true
+
+[connection signal="dir_selected" from="FileDialog" to="." method="OnFileDialogDirSelected"]
+[connection signal="pressed" from="VBoxContainer/GridContainer/GdSearchBtn" to="." method="OnGDSearchBtnPressed"]
+[connection signal="pressed" from="VBoxContainer/GridContainer/UCSearchBtn" to="." method="OnUCSearchBtnPressed"]
+[connection signal="pressed" from="VBoxContainer/GridContainer/UCGodotSearchBtn" to="." method="OnUCGodotSearchBtnPressed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/ImportBtn" to="." method="OnImportBtnPressed"]

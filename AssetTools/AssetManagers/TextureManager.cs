@@ -9,7 +9,7 @@ public class TextureManager
 	public static readonly TextureManager Instance = new TextureManager();
 
 	public static string GetUCClumpPath(string clumpName = "") {
-		return Path.Join(AssetPathManager.Instance.UCPath, "clumps", clumpName);
+		return Path.Join(AssetPathManager.Instance.UCFolderPath, "clumps", clumpName);
 	}
 
 	public static string GetWorkDirPath(string clumpName = "", string fileName = "") {

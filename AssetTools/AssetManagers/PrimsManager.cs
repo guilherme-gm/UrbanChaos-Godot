@@ -22,7 +22,7 @@ public class PrimsManager
 	public static readonly PrimsManager Instance = new PrimsManager();
 
 	public static string GetUCPrimPath(string primName = "") {
-		return Path.Join(AssetPathManager.Instance.UCPath, "server", "prims", primName);
+		return Path.Join(AssetPathManager.Instance.UCFolderPath, "server", "prims", primName);
 	}
 
 	public PrimFileInfo[] ListPrims() {
