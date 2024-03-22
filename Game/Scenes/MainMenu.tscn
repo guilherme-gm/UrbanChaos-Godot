@@ -1,5 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://bplasl4y3m3xv"]
+[gd_scene load_steps=3 format=3 uid="uid://bplasl4y3m3xv"]
 
+[ext_resource type="Theme" uid="uid://cnswbgw1v68cd" path="res://Assets/MainMenuTheme.tres" id="1_rn0ot"]
 [ext_resource type="Texture2D" uid="uid://ddjd1fv43ylfl" path="res://Assets/MainMenu/BG/Leaves_Main.tga" id="1_scgjp"]
 
 [node name="MainMenu" type="TextureRect"]
@@ -8,4 +9,27 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("1_rn0ot")
 texture = ExtResource("1_scgjp")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -77.0
+offset_top = -24.5
+offset_right = 77.0
+offset_bottom = 24.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="StartGameBtn" type="Button" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+theme = ExtResource("1_rn0ot")
+text = "Start Game"
+flat = true
+alignment = 0
