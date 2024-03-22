@@ -124,6 +124,9 @@ public partial class ImportToolUI : Panel
 
 			this.ProgressLabel.Text = "Completed.";
 		}
+		catch (Exception error) {
+			this.OnImportToolCoreProgressLog(error.Message);
+		}
 		finally {
 			this.SetImportElementsEnabled(true);
 		}
