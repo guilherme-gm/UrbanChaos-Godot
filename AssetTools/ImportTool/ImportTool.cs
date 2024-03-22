@@ -18,6 +18,9 @@ public partial class ImportTool : Resource
 		this.Commands = [
 			new CreateProject(),
 
+			new InitSection("Preparing fonts..."),
+			new CreateMainMenuFont("/server/textures/extras/olyfont2.tga", "/Assets/MainMenu/font.tres"),
+
 			new InitSection("Importing textures..."),
 			new CopyFile("/data/TITLE LEAVES1.TGA", "/Assets/MainMenu/BG/Leaves_Main.tga"),
 			new CopyFile("/data/map leaves darci.tga", "/Assets/MainMenu/BG/Leaves_Map_Darci.tga"),
