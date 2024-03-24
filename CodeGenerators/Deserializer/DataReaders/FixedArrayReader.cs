@@ -19,11 +19,8 @@ public class FixedArrayReader : IReader
 
 		this.FieldName = descriptor.Name;
 
-		if (AttributeUtils.HasAttribute(descriptor.FieldSymbol, NestedAttribute.Name)) {
-			this.ReadingCall = $"{descriptor.FieldType}.Deserialize(br)";
-		} else {
-			this.ReadingCall = $"br.Read{descriptor.FieldType}()";
-		}
+		var basicReader = new BasicReader(descriptor);
+		this.ReadingCall = basicReader.ReadingCall;
 
 		this.ReadCode = this.GetReadCode();
 	}

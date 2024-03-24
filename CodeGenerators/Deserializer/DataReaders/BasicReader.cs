@@ -1,4 +1,5 @@
 using Deserializer.Templates;
+using System;
 
 namespace CodeGenerators.Deserializer.DataReaders;
 
@@ -12,7 +13,13 @@ public class BasicReader : IReader
 		this.FieldName = descriptor.Name;
 
 		if (AttributeUtils.HasAttribute(descriptor.FieldSymbol, NestedAttribute.Name)) {
-			this.ReadingCall = $"{descriptor.FieldType}.Deserialize(br)";
+			NestedAttribute nestedAttribute = NestedAttribute.FromSymbol(descriptor.FieldSymbol);
+			string additionalParams = "";
+			if (nestedAttribute.AdditionalParams?.Length > 0) {
+				additionalParams = $", {String.Join(", ", nestedAttribute.AdditionalParams)}";
+			}
+
+			this.ReadingCall = $"{descriptor.FieldTypeFullname}.Deserialize(br{additionalParams})";
 		} else {
 			this.ReadingCall = $"br.Read{descriptor.FieldType}()";
 		}

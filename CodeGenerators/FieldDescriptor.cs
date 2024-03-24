@@ -8,6 +8,8 @@ public class FieldDescriptor
 
 	public string FieldType { get; set; }
 
+	public string FieldTypeFullname { get; set; }
+
 	public ISymbol TypeSymbol { get; set; }
 
 	public ISymbol FieldSymbol { get; set; }
@@ -23,6 +25,7 @@ public class FieldDescriptor
 			Name = name,
 			TypeSymbol = namedSymbol,
 			FieldType = namedSymbol.Name,
+			FieldTypeFullname = namedSymbol.ToDisplayString(),
 			IsArray = false,
 			Rank = 0,
 		};
@@ -33,9 +36,11 @@ public class FieldDescriptor
 
 		var nextRank = arraySymbol;
 		string type = arraySymbol.ElementType.Name;
+		string typeFullname = arraySymbol.ElementType.ToDisplayString();
 		while (nextRank.ElementType is IArrayTypeSymbol arrayTypeSymbol) {
 			rank += arrayTypeSymbol.Rank;
 			type = arrayTypeSymbol.ElementType.Name;
+			typeFullname = arraySymbol.ElementType.ToDisplayString();
 			nextRank = arrayTypeSymbol;
 		}
 
@@ -43,6 +48,7 @@ public class FieldDescriptor
 			Name = name,
 			TypeSymbol = arraySymbol,
 			FieldType = type,
+			FieldTypeFullname = typeFullname,
 			IsArray = true,
 			Rank = rank,
 		};

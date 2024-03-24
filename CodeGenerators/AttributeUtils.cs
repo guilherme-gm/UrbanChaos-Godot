@@ -40,4 +40,10 @@ public static class AttributeUtils
 
 		return (T)val.Value;
 	}
+
+	public static bool AttributeHasField(AttributeData attribute, string name) {
+		var val = attribute?.NamedArguments.SingleOrDefault((param) => param.Key == name).Value;
+
+		return !(val?.IsNull ?? true);
+	}
 }

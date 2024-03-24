@@ -19,11 +19,8 @@ public class VariableSizedArrayReader : IReader
 		var attribute = VariableSizedArrayAttribute.FromSymbol(descriptor.FieldSymbol);
 		this.SizeFieldName = attribute.SizePropertyName;
 
-		if (AttributeUtils.HasAttribute(descriptor.FieldSymbol, NestedAttribute.Name)) {
-			this.ReadCall = $"{descriptor.FieldType}.Deserialize(br)";
-		} else {
-			this.ReadCall = $"br.Read{descriptor.FieldType}()";
-		}
+		var basicReader = new BasicReader(descriptor);
+		this.ReadCall = basicReader.ReadingCall;
 	}
 
 	public string GetTemplate() {

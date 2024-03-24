@@ -58,8 +58,29 @@ You may need them to interact with some of the attributes below.
 
 ### Class Attributes
 
-#### `DeserializeGenerator`
+#### `DeserializeGenerator(AdditionalParameters? = string[])`
 Determines that the source generator should apply to this class in order to generate the `Deserialize` method.
+
+- `AdditionalParameters` may be set as an array of additional parameters that `Deserialize` should receive.
+    If ommitted, only `br` paramter is set.
+
+Example:
+```CSharp
+// MyClass.cs
+[Deserializer.DeserializeGenerator(AdditionalParameters = ['string someVal1', 'int someVal2'])]
+public partial class MyClass
+{
+	public int MyIntVal { get; set; }
+
+	[Deserializer.FixedArray(Dimensions = [3])]
+	public int[] SomeNumbers { get; set; }
+
+	// Generated:
+	public static MyClass Deserialize(BinaryReader br, string someVal1, int someVal2) {
+		// ...
+	}
+}
+```
 
 
 ### Property/Field Deserialization Attributes
@@ -102,10 +123,13 @@ Example:
 public string MyString { get; set; }
 ```
 
-**Note:** This attri
 
-#### `Nested()`
+#### `Nested(AdditionalParameters? = string[])`
 This field must be deserialized by their own `Deserialize` method.
+
+- `AdditionalParameters` may be set as an array of values to be passed to `Deserialize` method
+   it should match the list of `AdditionalParameters` from the target's `DeserializeGenerator`.
+   This is called in the context of the current `Deserialize` method, so you have access to `br` and `value` variables.
 
 **This attribute _may_ be used together with Array-related attributes.**
 
