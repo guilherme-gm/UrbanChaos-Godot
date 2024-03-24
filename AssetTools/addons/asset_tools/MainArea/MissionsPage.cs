@@ -4,7 +4,7 @@ using Godot;
 namespace AssetTools.Addons.Asset_Tools;
 
 [Tool]
-public partial class MapsPage : VBoxContainer
+public partial class MissionsPage : VBoxContainer
 {
 	[Export]
 	private Tree FileTree { get; set; }
@@ -36,7 +36,7 @@ public partial class MapsPage : VBoxContainer
 
 	public void ReloadMapsList() {
 		// this.LoadTextureSets();
-		this.MapFilesList = MapsManager.Instance.ListFiles();
+		this.MapFilesList = MissionsManager.Instance.ListFiles();
 	}
 
 	private void DrawFileTree(string query = "") {
@@ -64,8 +64,8 @@ public partial class MapsPage : VBoxContainer
 
 	public void OnTreeItemSelected() {
 		var fileName = this.FileTree.GetSelected().GetMetadata(0).AsString();
-		var map = MapsManager.Instance.LoadMap(fileName);
-		this.MapTreeView.SetMissoin(fileName, map);
+		var mission = MissionsManager.Instance.LoadMissoin(fileName);
+		this.MapTreeView.SetMission(fileName, mission);
 	}
 
 #pragma warning disable IDE0060 // Remove unused parameter -- part of API

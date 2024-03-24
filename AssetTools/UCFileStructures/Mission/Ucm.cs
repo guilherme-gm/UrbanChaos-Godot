@@ -1,4 +1,4 @@
-namespace UCFileStructures.Map;
+namespace UCFileStructures.Mission;
 
 [Deserializer.DeserializeGenerator]
 public partial class Ucm

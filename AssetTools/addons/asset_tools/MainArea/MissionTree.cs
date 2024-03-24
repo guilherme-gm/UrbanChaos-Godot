@@ -1,5 +1,5 @@
 using Godot;
-using UCFileStructures.Map;
+using UCFileStructures.Mission;
 
 namespace AssetTools.Addons.Asset_Tools;
 
@@ -15,7 +15,7 @@ public partial class MissionTree : Tree
 		this.SetColumnTitle(1, "Value");
 	}
 
-	public void SetMissoin(string fileName, Ucm mission) {
+	public void SetMission(string fileName, Ucm mission) {
 		this.FileName = fileName;
 		this.Mission = mission;
 		this.RedrawTree();

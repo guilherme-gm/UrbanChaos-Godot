@@ -1,16 +1,16 @@
 [gd_scene load_steps=4 format=3 uid="uid://bm8ic4a58lgw1"]
 
-[ext_resource type="Script" path="res://addons/asset_tools/MainArea/MapsPage.cs" id="1_v4yo6"]
-[ext_resource type="PackedScene" uid="uid://ctwgk0x0cqjv7" path="res://PrimMeshInstance.tscn" id="2_i47to"]
-[ext_resource type="PackedScene" uid="uid://chh28n18j0w8x" path="res://addons/asset_tools/MainArea/MissionTree.tscn" id="3_vifm6"]
+[ext_resource type="Script" path="res://addons/asset_tools/MainArea/MissionsPage.cs" id="1_xbbof"]
+[ext_resource type="PackedScene" uid="uid://ctwgk0x0cqjv7" path="res://PrimMeshInstance.tscn" id="2_ffq6e"]
+[ext_resource type="PackedScene" uid="uid://chh28n18j0w8x" path="res://addons/asset_tools/MainArea/MissionTree.tscn" id="3_86drp"]
 
-[node name="Maps" type="VBoxContainer" node_paths=PackedStringArray("FileTree", "SearchTxt", "Camera", "TextureSetOptions", "MapTreeView")]
+[node name="Missions" type="VBoxContainer" node_paths=PackedStringArray("FileTree", "SearchTxt", "Camera", "TextureSetOptions", "MapTreeView")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_v4yo6")
+script = ExtResource("1_xbbof")
 FileTree = NodePath("TextureSetsPage/Tree")
 SearchTxt = NodePath("HBoxContainer/SearchTxt")
 Camera = NodePath("TextureSetsPage/PanelContainer/TabContainer/Visualization/SubViewportContainer/SubViewport/Camera3D")
@@ -154,10 +154,10 @@ render_target_update_mode = 4
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.28854)
 current = true
 
-[node name="PrimMeshInstance" parent="TextureSetsPage/PanelContainer/TabContainer/Visualization/SubViewportContainer/SubViewport" instance=ExtResource("2_i47to")]
+[node name="PrimMeshInstance" parent="TextureSetsPage/PanelContainer/TabContainer/Visualization/SubViewportContainer/SubViewport" instance=ExtResource("2_ffq6e")]
 visible = false
 
-[node name="Tree View" parent="TextureSetsPage/PanelContainer/TabContainer" instance=ExtResource("3_vifm6")]
+[node name="Tree View" parent="TextureSetsPage/PanelContainer/TabContainer" instance=ExtResource("3_86drp")]
 visible = false
 layout_mode = 2
 

@@ -3,7 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://bncaa64mv030s" path="res://addons/asset_tools/MainArea/TextureSetsPage.tscn" id="1_ik3ue"]
 [ext_resource type="PackedScene" uid="uid://urlhp55s57g8" path="res://addons/asset_tools/MainArea/TextureClumpsPage.tscn" id="2_u66f1"]
 [ext_resource type="PackedScene" uid="uid://wsfkt4vsrxv0" path="res://addons/asset_tools/MainArea/PrimsPage.tscn" id="3_fj6oh"]
-[ext_resource type="PackedScene" uid="uid://bm8ic4a58lgw1" path="res://addons/asset_tools/MainArea/MapsPage.tscn" id="4_kmjjt"]
+[ext_resource type="PackedScene" uid="uid://bm8ic4a58lgw1" path="res://addons/asset_tools/MainArea/MissionsPage.tscn" id="4_fbihy"]
 
 [node name="AssetToolMain" type="TabContainer"]
 anchors_preset = 15
@@ -24,6 +24,6 @@ layout_mode = 2
 visible = false
 layout_mode = 2
 
-[node name="Maps" parent="." instance=ExtResource("4_kmjjt")]
+[node name="Missions" parent="." instance=ExtResource("4_fbihy")]
 visible = false
 layout_mode = 2
