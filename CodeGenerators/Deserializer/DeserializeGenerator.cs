@@ -42,12 +42,12 @@ public class DeserializeGenerator : ISourceGenerator
 			return;
 
 		foreach (var targetClass in receiver.TargetClasses) {
-			var generatorParams = this.GenerateDeserializeClass(targetClass);
+			var readerClass = this.GenerateDeserializeClass(targetClass);
 			this.AddSourceFromTemplate(
 				context,
-				$"{generatorParams.ClassName}_deserialize.g",
-				ReaderClass.Template,
-				generatorParams
+				$"{readerClass.ClassName}_deserialize.g",
+				readerClass.GetTemplate(),
+				readerClass
 			);
 		}
 	}
@@ -114,20 +114,19 @@ public class DeserializeGenerator : ISourceGenerator
 		return sb.ToString();
 	}
 
-	private ReaderClass.ReaderClassTemplateParams GenerateDeserializeClass(INamedTypeSymbol c) {
-		var templateParams = new ReaderClass.ReaderClassTemplateParams();
+	private ReaderClass GenerateDeserializeClass(INamedTypeSymbol clsSymbol) {
+		var readerClass = new ReaderClass(clsSymbol);
 
-		var className = c.ToDisplayString();
-		string classNamespace = String.Empty;
-		if (!c.ContainingNamespace.IsGlobalNamespace) {
-			classNamespace = c.ContainingNamespace.ToDisplayString();
+		var className = clsSymbol.ToDisplayString();
+		if (!clsSymbol.ContainingNamespace.IsGlobalNamespace) {
+			var classNamespace = clsSymbol.ContainingNamespace.ToDisplayString();
 			className = className.Replace($"{classNamespace}.", "");
+			readerClass.Namespace = classNamespace;
 		}
 
-		templateParams.ClassName = className;
-		templateParams.Namespace = classNamespace != "" ? $"namespace {classNamespace};" : "";
-		templateParams.Code = this.GenerateDeserializeCode(className, c);
+		readerClass.ClassName = className;
+		readerClass.Code = this.GenerateDeserializeCode(className, clsSymbol);
 
-		return templateParams;
+		return readerClass;
 	}
 }
