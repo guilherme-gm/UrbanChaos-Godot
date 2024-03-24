@@ -18,6 +18,9 @@ public partial class MapsPage : VBoxContainer
 	[Export]
 	private OptionButton TextureSetOptions { get; set; }
 
+	[Export]
+	private MissionTree MapTreeView { get; set; }
+
 	private string[] MapFilesList { get; set; }
 
 	public override void _Ready() {
@@ -60,7 +63,9 @@ public partial class MapsPage : VBoxContainer
 	}
 
 	public void OnTreeItemSelected() {
-		// this.Render();
+		var fileName = this.FileTree.GetSelected().GetMetadata(0).AsString();
+		var map = MapsManager.Instance.LoadMap(fileName);
+		this.MapTreeView.SetMissoin(fileName, map);
 	}
 
 #pragma warning disable IDE0060 // Remove unused parameter -- part of API

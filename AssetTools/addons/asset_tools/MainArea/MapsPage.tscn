@@ -1,9 +1,10 @@
-[gd_scene load_steps=3 format=3 uid="uid://bm8ic4a58lgw1"]
+[gd_scene load_steps=4 format=3 uid="uid://bm8ic4a58lgw1"]
 
 [ext_resource type="Script" path="res://addons/asset_tools/MainArea/MapsPage.cs" id="1_v4yo6"]
 [ext_resource type="PackedScene" uid="uid://ctwgk0x0cqjv7" path="res://PrimMeshInstance.tscn" id="2_i47to"]
+[ext_resource type="PackedScene" uid="uid://chh28n18j0w8x" path="res://addons/asset_tools/MainArea/MissionTree.tscn" id="3_vifm6"]
 
-[node name="Maps" type="VBoxContainer" node_paths=PackedStringArray("FileTree", "SearchTxt", "Camera", "TextureSetOptions")]
+[node name="Maps" type="VBoxContainer" node_paths=PackedStringArray("FileTree", "SearchTxt", "Camera", "TextureSetOptions", "MapTreeView")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -14,6 +15,7 @@ FileTree = NodePath("TextureSetsPage/Tree")
 SearchTxt = NodePath("HBoxContainer/SearchTxt")
 Camera = NodePath("TextureSetsPage/PanelContainer/TabContainer/Visualization/SubViewportContainer/SubViewport/Camera3D")
 TextureSetOptions = NodePath("HBoxContainer/TextureSetOpt")
+MapTreeView = NodePath("TextureSetsPage/PanelContainer/TabContainer/Tree View")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 2
@@ -155,7 +157,7 @@ current = true
 [node name="PrimMeshInstance" parent="TextureSetsPage/PanelContainer/TabContainer/Visualization/SubViewportContainer/SubViewport" instance=ExtResource("2_i47to")]
 visible = false
 
-[node name="Data Tree" type="VBoxContainer" parent="TextureSetsPage/PanelContainer/TabContainer"]
+[node name="Tree View" parent="TextureSetsPage/PanelContainer/TabContainer" instance=ExtResource("3_vifm6")]
 visible = false
 layout_mode = 2
 
