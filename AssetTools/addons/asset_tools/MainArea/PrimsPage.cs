@@ -107,7 +107,9 @@ public partial class PrimsPage : VBoxContainer
 		this.Render();
 	}
 
+#pragma warning disable IDE0060 // Remove unused parameter -- part of API
 	public void OnTextureSetChanged(int option) {
 		this.Render();
 	}
+#pragma warning restore IDE0060 // Remove unused parameter
 }

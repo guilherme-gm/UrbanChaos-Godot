@@ -13,7 +13,7 @@ grow_vertical = 2
 script = ExtResource("1_xbbof")
 FileTree = NodePath("TextureSetsPage/Tree")
 SearchTxt = NodePath("HBoxContainer/SearchTxt")
-Camera = NodePath("TextureSetsPage/PanelContainer/TabContainer/Visualization/SubViewportContainer/SubViewport/Camera3D")
+Camera = NodePath("TextureSetsPage/PanelContainer/TabContainer/Map Visualization/SubViewportContainer/SubViewport/Camera3D")
 TextureSetOptions = NodePath("HBoxContainer/TextureSetOpt")
 MapTreeView = NodePath("TextureSetsPage/PanelContainer/TabContainer/Tree View")
 
@@ -137,24 +137,24 @@ layout_mode = 2
 [node name="TabContainer" type="TabContainer" parent="TextureSetsPage/PanelContainer"]
 layout_mode = 2
 
-[node name="Visualization" type="VBoxContainer" parent="TextureSetsPage/PanelContainer/TabContainer"]
+[node name="Map Visualization" type="VBoxContainer" parent="TextureSetsPage/PanelContainer/TabContainer"]
 layout_mode = 2
 
-[node name="SubViewportContainer" type="SubViewportContainer" parent="TextureSetsPage/PanelContainer/TabContainer/Visualization"]
+[node name="SubViewportContainer" type="SubViewportContainer" parent="TextureSetsPage/PanelContainer/TabContainer/Map Visualization"]
 layout_mode = 2
 size_flags_vertical = 3
 stretch = true
 
-[node name="SubViewport" type="SubViewport" parent="TextureSetsPage/PanelContainer/TabContainer/Visualization/SubViewportContainer"]
+[node name="SubViewport" type="SubViewport" parent="TextureSetsPage/PanelContainer/TabContainer/Map Visualization/SubViewportContainer"]
 handle_input_locally = false
 size = Vector2i(990, 582)
 render_target_update_mode = 4
 
-[node name="Camera3D" type="Camera3D" parent="TextureSetsPage/PanelContainer/TabContainer/Visualization/SubViewportContainer/SubViewport"]
+[node name="Camera3D" type="Camera3D" parent="TextureSetsPage/PanelContainer/TabContainer/Map Visualization/SubViewportContainer/SubViewport"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.28854)
 current = true
 
-[node name="PrimMeshInstance" parent="TextureSetsPage/PanelContainer/TabContainer/Visualization/SubViewportContainer/SubViewport" instance=ExtResource("2_ffq6e")]
+[node name="PrimMeshInstance" parent="TextureSetsPage/PanelContainer/TabContainer/Map Visualization/SubViewportContainer/SubViewport" instance=ExtResource("2_ffq6e")]
 visible = false
 
 [node name="Tree View" parent="TextureSetsPage/PanelContainer/TabContainer" instance=ExtResource("3_86drp")]

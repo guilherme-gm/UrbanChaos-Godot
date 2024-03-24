@@ -30,13 +30,27 @@ public partial class MissionsPage : VBoxContainer
 
 	public void OnRefreshBtnClicked() {
 		this.ReloadMapsList();
-		// this.SearchTxt.Text = "";
-		// this.DrawFileTree();
+		this.SearchTxt.Text = "";
+		this.DrawFileTree();
 	}
 
 	public void ReloadMapsList() {
-		// this.LoadTextureSets();
+		this.LoadTextureSets();
 		this.MapFilesList = MissionsManager.Instance.ListFiles();
+	}
+
+	private void LoadTextureSets() {
+		this.TextureSetOptions.Clear();
+		this.TextureSetOptions.AddItem("None", 0);
+		this.TextureSetOptions.SetItemMetadata(0, "");
+
+		int id = 1;
+		var clumps = TextureManager.Instance.ListClumps();
+		foreach (var clumpName in clumps) {
+			this.TextureSetOptions.AddItem(clumpName, id);
+			this.TextureSetOptions.SetItemMetadata(id, clumpName);
+			id++;
+		}
 	}
 
 	private void DrawFileTree(string query = "") {
@@ -57,9 +71,9 @@ public partial class MissionsPage : VBoxContainer
 	}
 
 	public void OnSearchBtnClicked() {
-		// var query = this.SearchTxt.Text;
+		var query = this.SearchTxt.Text;
 
-		// this.DrawFileTree(query);
+		this.DrawFileTree(query);
 	}
 
 	public void OnTreeItemSelected() {
@@ -70,6 +84,7 @@ public partial class MissionsPage : VBoxContainer
 
 #pragma warning disable IDE0060 // Remove unused parameter -- part of API
 	public void OnTextureSetChanged(int option) {
+		// @TODO:
 		// this.Render();
 	}
 #pragma warning restore IDE0060 // Remove unused parameter
