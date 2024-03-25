@@ -78,8 +78,8 @@ public partial class MissionsPage : VBoxContainer
 
 	public void OnTreeItemSelected() {
 		var fileName = this.FileTree.GetSelected().GetMetadata(0).AsString();
-		var mission = MissionsManager.Instance.LoadMissoin(fileName);
-		this.MapTreeView.SetMission(fileName, mission);
+		var mission = MissionsManager.Instance.LoadMission(fileName);
+		this.MapTreeView.SetMission(mission);
 	}
 
 #pragma warning disable IDE0060 // Remove unused parameter -- part of API

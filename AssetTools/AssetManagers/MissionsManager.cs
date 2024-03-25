@@ -1,3 +1,4 @@
+using AssetTools.Structures;
 using System.IO;
 using System.Linq;
 using UCFileStructures.Mission;
@@ -22,12 +23,20 @@ public class MissionsManager
 		return fileList;
 	}
 
-	public Ucm LoadMissoin(string missionFileName) {
+	public Mission LoadMission(string missionFileName) {
 		var filePath = GetUCMissionPath(missionFileName);
 		using var fs = new FileStream(filePath, FileMode.Open);
 		using var br = new BinaryReader(fs);
-		var map = Ucm.Deserialize(br);
+		var ucm = Ucm.Deserialize(br);
+		_ = MapManager.Instance.TryLoadMap(ucm.MapName, out Map map);
 
-		return map;
+		var mission = new Mission() {
+			UcmStatus = AssetLoadStatus.Loaded,
+			UcmFilePath = missionFileName,
+			UcmFile = ucm,
+			Map = map,
+		};
+
+		return mission;
 	}
 }

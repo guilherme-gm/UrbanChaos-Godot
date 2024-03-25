@@ -160,6 +160,7 @@ visible = false
 [node name="Tree View" parent="TextureSetsPage/PanelContainer/TabContainer" instance=ExtResource("3_86drp")]
 visible = false
 layout_mode = 2
+select_mode = 1
 
 [connection signal="pressed" from="HBoxContainer/RefreshBtn" to="." method="OnRefreshBtnClicked"]
 [connection signal="item_selected" from="HBoxContainer/TextureSetOpt" to="." method="OnTextureSetChanged"]
