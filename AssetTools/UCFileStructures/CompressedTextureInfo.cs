@@ -75,7 +75,7 @@ public partial class CompressedTextureInfo
 		this.TextureSize = (this.CompressedTexture >> 14) & 3;
 
 		switch (this.TextureRotation) {
-			case 0: this.UVs = Rotation0UV; break;
+			case 0: this.UVs = [.. Rotation0UV]; break;
 			case 1: this.UVs = [.. Rotation1UV]; break;
 			case 2: this.UVs = [.. Rotation2UV]; break;
 			case 3: this.UVs = [.. Rotation3UV]; break;

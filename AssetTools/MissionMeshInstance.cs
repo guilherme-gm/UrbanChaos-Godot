@@ -57,7 +57,9 @@ public partial class MissionMeshInstance : MeshInstance3D
 		int vertexCount = 0;
 		foreach (var floor in mission.Map.FloorStores) {
 			foreach (var idx in new int[] { 0, 1, 2, 3 }) {
-				st.SetUV(this.ReallocUV(floor.UVs[idx], this.MaterialRealloc[floor.TexturePage]));
+				var uv = floor.UVs[idx];
+				var realloc = this.MaterialRealloc[floor.TexturePage];
+				st.SetUV(this.ReallocUV(uv, realloc));
 				st.SetNormal(Vector3.Up);
 				st.AddVertex(floor.Vertices[idx]);
 				vertexCount++;
@@ -161,8 +163,14 @@ public partial class MissionMeshInstance : MeshInstance3D
 		this.DrawMission(mission);
 	}
 
-	public void LoadMission(Mission mission) {
+	public void LoadMission(Mission mission, string textureSet = "") {
 		this.MissionFilePath = null;
+		if (textureSet != "") {
+			this.LoadMaterials(mission, textureSet);
+		} else {
+			this.MaterialRealloc = null;
+		}
+
 		this.DrawMission(mission);
 	}
 }

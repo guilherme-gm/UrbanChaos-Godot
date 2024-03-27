@@ -21,6 +21,9 @@ public partial class MissionsPage : VBoxContainer
 	[Export]
 	private MissionTreeArea MissionTreeArea { get; set; }
 
+	[Export]
+	private MissionMeshInstance MissionMeshInstance { get; set; }
+
 	private string[] MapFilesList { get; set; }
 
 	public override void _Ready() {
@@ -80,6 +83,8 @@ public partial class MissionsPage : VBoxContainer
 		var fileName = this.FileTree.GetSelected().GetMetadata(0).AsString();
 		var mission = MissionsManager.Instance.LoadMission(fileName);
 		this.MissionTreeArea.SetMission(mission);
+		this.MissionMeshInstance.LoadMission(mission, this.TextureSetOptions.Text);
+		this.MissionMeshInstance.Visible = true;
 	}
 
 #pragma warning disable IDE0060 // Remove unused parameter -- part of API
