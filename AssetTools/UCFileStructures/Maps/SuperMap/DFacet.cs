@@ -28,4 +28,8 @@ public partial class DFacet
 	public byte CutHole { get; set; }
 	[Deserializer.FixedArray(Dimensions = [2])]
 	public byte[] Counter { get; set; }
+
+	partial void PostDeserialize() {
+		this.Dfcache = 0; // After deserialization the original code zeores it.
+	}
 }

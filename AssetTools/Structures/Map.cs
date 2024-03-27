@@ -1,5 +1,6 @@
 using AssetTools.UCFileStructures.Maps;
 using AssetTools.UCFileStructures.Maps.SuperMap;
+using System.Linq;
 
 namespace AssetTools.Structures;
 
@@ -25,4 +26,5 @@ public class Map
 	public string OBSizeString => this.SaveType > 23 ? this.OBSize.ToString() : "N/A";
 	public string TextureSetString => this.SaveType >= 20 ? this.TextureSet.ToString() : "N/A";
 
+	public FloorStore[] FloorStores => this.HighResMap.Select(FloorStore.FromMapHi).ToArray();
 }

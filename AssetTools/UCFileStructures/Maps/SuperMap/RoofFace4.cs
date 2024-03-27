@@ -12,4 +12,12 @@ public partial class RoofFace4
 	public byte RZ { get; set; }
 	/** //link list of walkables off floor  */
 	public short Next { get; set; }
+
+	partial void PostDeserialize() {
+		if (this.DY[0] != 0 || this.DY[1] != 0 || this.DY[2] != 0) {
+			this.RZ |= 1 << 7;
+		} else {
+			this.RZ &= 127;
+		}
+	}
 }

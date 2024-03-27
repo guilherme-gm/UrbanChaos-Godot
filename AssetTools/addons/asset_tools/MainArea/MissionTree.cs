@@ -67,7 +67,7 @@ public partial class MissionTree : Tree
 				_ = this.CreateItem(
 					mapHiNode,
 					$"Item ({i / 128}, {i % 128})",
-					$"Texture = {item.Texture} ; Flags = [{String.Join(", ", item.Flags.Select(v => v.Name))}] ; Alt = {item.Alt} ; Height = {item.Height}"
+					$"Texture = {item.Texture} ; Flags = [{String.Join(", ", item.Flags.Select(v => v.Name))}] ; Alt = {item.Altitude} ; Height = {item.Height}"
 				);
 				/*
 				_ = this.CreateItem(itemNode, "Texture", item.Texture.ToString());
