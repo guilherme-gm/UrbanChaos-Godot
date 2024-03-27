@@ -1,0 +1,29 @@
+[gd_scene load_steps=3 format=3 uid="uid://chh28n18j0w8x"]
+
+[ext_resource type="Script" path="res://addons/asset_tools/MainArea/MissionTreeArea.cs" id="1_cj0w6"]
+[ext_resource type="Script" path="res://addons/asset_tools/MainArea/MissionTree.cs" id="2_2rt3e"]
+
+[node name="MissionTreeArea" type="VBoxContainer" node_paths=PackedStringArray("MissionTree", "DrawHighResCheck")]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_cj0w6")
+MissionTree = NodePath("Tree")
+DrawHighResCheck = NodePath("HBoxContainer/DrawHighResCheck")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="DrawHighResCheck" type="CheckBox" parent="HBoxContainer"]
+layout_mode = 2
+text = "Show Map High Res nodes (may affect performance)"
+
+[node name="Tree" type="Tree" parent="."]
+layout_mode = 2
+size_flags_vertical = 3
+columns = 2
+script = ExtResource("2_2rt3e")
+
+[connection signal="toggled" from="HBoxContainer/DrawHighResCheck" to="." method="OnDrawHighResToggleChanged"]

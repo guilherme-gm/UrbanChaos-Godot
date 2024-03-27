@@ -2,9 +2,9 @@
 
 [ext_resource type="Script" path="res://addons/asset_tools/MainArea/MissionsPage.cs" id="1_xbbof"]
 [ext_resource type="PackedScene" uid="uid://ctwgk0x0cqjv7" path="res://PrimMeshInstance.tscn" id="2_ffq6e"]
-[ext_resource type="PackedScene" uid="uid://chh28n18j0w8x" path="res://addons/asset_tools/MainArea/MissionTree.tscn" id="3_86drp"]
+[ext_resource type="PackedScene" uid="uid://chh28n18j0w8x" path="res://addons/asset_tools/MainArea/MissionTreeArea.tscn" id="3_nmbd8"]
 
-[node name="Missions" type="VBoxContainer" node_paths=PackedStringArray("FileTree", "SearchTxt", "Camera", "TextureSetOptions", "MapTreeView")]
+[node name="Missions" type="VBoxContainer" node_paths=PackedStringArray("FileTree", "SearchTxt", "Camera", "TextureSetOptions", "MissionTreeArea")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -15,7 +15,7 @@ FileTree = NodePath("TextureSetsPage/Tree")
 SearchTxt = NodePath("HBoxContainer/SearchTxt")
 Camera = NodePath("TextureSetsPage/PanelContainer/TabContainer/Map Visualization/SubViewportContainer/SubViewport/Camera3D")
 TextureSetOptions = NodePath("HBoxContainer/TextureSetOpt")
-MapTreeView = NodePath("TextureSetsPage/PanelContainer/TabContainer/Tree View")
+MissionTreeArea = NodePath("TextureSetsPage/PanelContainer/TabContainer/Tree View")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 2
@@ -157,10 +157,9 @@ current = true
 [node name="PrimMeshInstance" parent="TextureSetsPage/PanelContainer/TabContainer/Map Visualization/SubViewportContainer/SubViewport" instance=ExtResource("2_ffq6e")]
 visible = false
 
-[node name="Tree View" parent="TextureSetsPage/PanelContainer/TabContainer" instance=ExtResource("3_86drp")]
+[node name="Tree View" parent="TextureSetsPage/PanelContainer/TabContainer" instance=ExtResource("3_nmbd8")]
 visible = false
 layout_mode = 2
-select_mode = 1
 
 [connection signal="pressed" from="HBoxContainer/RefreshBtn" to="." method="OnRefreshBtnClicked"]
 [connection signal="item_selected" from="HBoxContainer/TextureSetOpt" to="." method="OnTextureSetChanged"]

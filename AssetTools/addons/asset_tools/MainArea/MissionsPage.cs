@@ -19,7 +19,7 @@ public partial class MissionsPage : VBoxContainer
 	private OptionButton TextureSetOptions { get; set; }
 
 	[Export]
-	private MissionTree MapTreeView { get; set; }
+	private MissionTreeArea MissionTreeArea { get; set; }
 
 	private string[] MapFilesList { get; set; }
 
@@ -79,7 +79,7 @@ public partial class MissionsPage : VBoxContainer
 	public void OnTreeItemSelected() {
 		var fileName = this.FileTree.GetSelected().GetMetadata(0).AsString();
 		var mission = MissionsManager.Instance.LoadMission(fileName);
-		this.MapTreeView.SetMission(mission);
+		this.MissionTreeArea.SetMission(mission);
 	}
 
 #pragma warning disable IDE0060 // Remove unused parameter -- part of API
