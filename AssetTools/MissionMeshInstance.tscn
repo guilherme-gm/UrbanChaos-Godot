@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://b6o4gb0wtpatt"]
+
+[ext_resource type="Script" path="res://MissionMeshInstance.cs" id="1_qnx2t"]
+
+[node name="MissionMeshInstance" type="MeshInstance3D"]
+script = ExtResource("1_qnx2t")
