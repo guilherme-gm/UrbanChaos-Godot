@@ -33,7 +33,10 @@ public partial class MapHi
 	/// <summary>
 	/// padding; better find something to do with this 16K
 	/// </summary>
-	public sbyte Height { get; set; }
+	private sbyte CompressedHeight { get; set; }
+
+	[Deserializer.Skip]
+	public int Height { get; set; }
 
 	/// <summary>
 	/// Checks if "val" contains "flag", and if it does, adds "flag" to "flags".
@@ -54,6 +57,7 @@ public partial class MapHi
 
 	partial void PostDeserialize() {
 		this.Altitude = this.CompressedAltitude << 3;
+		this.Height = this.CompressedHeight << 6;
 
 		var flags = new List<MapFlag>();
 

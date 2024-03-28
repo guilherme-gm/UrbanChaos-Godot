@@ -38,4 +38,9 @@ public partial class Iam
 	[Deserializer.Condition(When = $"value.{nameof(SaveType)} >= 25")]
 	[Deserializer.FixedArray(Dimensions = [2 * 200 * 5])]
 	public byte[] PsxTexturesXY { get; set; }
+
+	[Deserializer.Skip]
+	public MapObjectSection MapObjects => this.SaveType < 23
+		? this.OldMapObjects
+		: this.SuperMap.SupermapMapObjects;
 }

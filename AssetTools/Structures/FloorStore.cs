@@ -21,13 +21,15 @@ public class FloorStore
 
 	public uint Specular { get; set; } = 0xff000000;
 
+	public int Height { get; set; }
+
 	public static FloorStore FromMapHi(MapHi mapHi, int index) {
 		var x = index / 128;
 		var z = index % 128;
 
 		var alt = mapHi.Altitude;
 		var size = 1f;
-		var size2 = 1f;
+		var size2 = 1f; // originally, this is 256, but this is extremally HUGE
 
 		return new FloorStore() {
 			Colour = 0, // Converted from night data (cache_a_row)
@@ -45,6 +47,7 @@ public class FloorStore
 				new Vector3(x * size2, alt * size, (z + 1) * size2),
 			],
 			UVs = mapHi.Texture.UVs,
+			Height = mapHi.Height,
 		};
 	}
 }

@@ -1,5 +1,6 @@
 // using AssetTools.UCFileStructures;
 using Godot;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -23,6 +24,20 @@ public class PrimsManager
 
 	public static string GetUCPrimPath(string primName = "") {
 		return Path.Join(AssetPathManager.Instance.UCFolderPath, "server", "prims", primName);
+	}
+
+	public static string GetUCPrimPath(int primId) {
+		var nPrimPath = Path.Join(AssetPathManager.Instance.UCFolderPath, "server", "prims", $"nprim{primId.ToString().PadLeft(3, '0')}.prm");
+		if (File.Exists(nPrimPath)) {
+			return nPrimPath;
+		}
+
+		var primPath = Path.Join(AssetPathManager.Instance.UCFolderPath, "server", "prims", $"prim{primId.ToString().PadLeft(3, '0')}.prm");
+		if (File.Exists(primPath)) {
+			return primPath;
+		}
+
+		throw new Exception($"Could not find Prim {primId}");
 	}
 
 	public PrimFileInfo[] ListPrims() {

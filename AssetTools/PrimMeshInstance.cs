@@ -41,7 +41,7 @@ public partial class PrimMeshInstance : MeshInstance3D
 			foreach (var pointId in face.Points) {
 				var point = points[pointId];
 
-				triangleVerts.Add(new Vector3(point.X, point.Y, point.Z));
+				triangleVerts.Add(new Vector3(point.X, point.Y, point.Z) / 256);
 				triangleIndices.Add(triangleVertsCount);
 				triangleVertsCount++;
 
@@ -79,7 +79,7 @@ public partial class PrimMeshInstance : MeshInstance3D
 			foreach (var pointId in face.Points) {
 				var point = points[pointId];
 
-				rectVerts.Add(new Vector3(point.X, point.Y, point.Z));
+				rectVerts.Add(new Vector3(point.X, point.Y, point.Z) / 256);
 				rectIndices.Add(rectVertsCount);
 				rectVertsCount++;
 
@@ -161,7 +161,10 @@ public partial class PrimMeshInstance : MeshInstance3D
 		if (fileName.StartsWith("nprim")) {
 			prim = NPrimFile.Deserialize(br);
 		} else if (fileName.StartsWith("prim")) {
-			prim = PrimFile.Deserialize(br);
+			GD.Print($"Skipping prim... NOT IMPLEMENTED... {path}");
+			// @TODO:
+			// prim = PrimFile.Deserialize(br);
+			return;
 		} else {
 			throw new System.Exception($"Could not identify file type for {fileName}");
 		}

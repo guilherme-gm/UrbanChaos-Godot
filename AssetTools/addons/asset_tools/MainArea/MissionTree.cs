@@ -132,7 +132,7 @@ public partial class MissionTree : Tree
 	}
 
 	private void DrawMapObjects(TreeItem mapNode) {
-		var section = this.Mission.Map.MapObjects;
+		var section = this.Mission.Map.IamFile.MapObjects;
 		if (section == null) {
 			_ = this.CreateItem(mapNode, "Map Objects", "N/A");
 			return;
@@ -150,23 +150,23 @@ public partial class MissionTree : Tree
 			_ = this.CreateItem(
 				objectsRootNode,
 				$"Item {i}",
-				$"X = {item.X} ; Y = {item.Y} ; Z = {item.Z} ; Prim = {item.Prim} ; Yaw = {item.Yaw} ; Flags = {item.Flags} ; InsideIndex = {item.InsideIndex}"
+				$"X = {item.LocalX} ; Y = {item.Y} ; Z = {item.LocalZ} ; Prim = {item.Prim} ; Yaw = {item.Yaw} ; Flags = {item.Flags} ; InsideIndex = {item.InsideIndex}"
 			);
 		}
 
 		var mapwhoNode = this.CreateItem(rootNode, "Mapwho", $"{section.Mapwho.Length} items");
 		mapwhoNode.Collapsed = true;
 
-		for (int i = 0; i < section.Mapwho.Length; i++) {
-			var item = section.Mapwho[i];
-			var index = item >> 5;
-			var num = item & 011111;
+		for (int x = 0; x < section.Mapwho.Length; x++) {
+			for (int z = 0; z < section.Mapwho[x].Length; z++) {
+				var item = section.Mapwho[x][z];
 
-			_ = this.CreateItem(
-				mapwhoNode,
-				$"Item {i}",
-				$"Index = {index} ; Num = {num}"
-			);
+				_ = this.CreateItem(
+					mapwhoNode,
+					$"({x}, {z})",
+					$"Index = {item.Index} ; Num = {item.Num}"
+				);
+			}
 		}
 	}
 

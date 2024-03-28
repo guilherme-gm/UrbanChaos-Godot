@@ -1,5 +1,6 @@
 using AssetTools.AssetManagers;
 using AssetTools.Structures;
+using AssetTools.UCFileStructures.Maps;
 using Godot;
 using System;
 using System.Collections.Generic;
@@ -56,12 +57,30 @@ public partial class MissionMeshInstance : MeshInstance3D
 
 		int vertexCount = 0;
 		foreach (var floor in mission.Map.FloorStores) {
+			// @TODO: Implement shadows
+			var isShadow = floor.Flags.Any((v) => v == MapFlag.Shadow1 || v == MapFlag.Shadow2 || v == MapFlag.Shadow3);
+			if (isShadow) {
+				GD.Print($"Skipping shadows");
+				continue;
+			}
+
+			if (floor.Flags.Contains(MapFlag.RoofExists)) {
+				GD.Print("There are roofs");
+				// @TODO: y = floor.Height;
+			}
+
+			var dy = 0f;
+			if (floor.Flags.Contains(MapFlag.SinkSquare) /* && !isWarehouse */) {
+				GD.Print("There are SinkSquare");
+				dy = -32f;
+			}
+
 			foreach (var idx in new int[] { 0, 1, 2, 3 }) {
 				var uv = floor.UVs[idx];
 				var realloc = this.MaterialRealloc[floor.TexturePage];
 				st.SetUV(this.ReallocUV(uv, realloc));
 				st.SetNormal(Vector3.Up);
-				st.AddVertex(floor.Vertices[idx]);
+				st.AddVertex(floor.Vertices[idx] + new Vector3(0, dy, 0));
 				vertexCount++;
 			}
 
@@ -172,5 +191,18 @@ public partial class MissionMeshInstance : MeshInstance3D
 		}
 
 		this.DrawMission(mission);
+
+		foreach (var child in this.GetChildren()) {
+			child.Free();
+		}
+
+		foreach (var mo in mission.Map.MapObjects) {
+			var path = PrimsManager.GetUCPrimPath(mo.Prim);
+			var primMesh = new PrimMeshInstance();
+			primMesh.LoadPrim(path, textureSet);
+			primMesh.Position = mo.Position;
+
+			this.AddChild(primMesh);
+		}
 	}
 }
