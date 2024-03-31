@@ -1,4 +1,6 @@
-namespace AssetTools.UCFileStructures;
+using AssetTools.UCFileStructures;
+
+namespace AssetTools.UCWorld;
 
 public record MapCoordinate(int Value)
 {

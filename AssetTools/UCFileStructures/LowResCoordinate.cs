@@ -1,3 +1,5 @@
+using AssetTools.UCWorld;
+
 namespace AssetTools.UCFileStructures;
 
 public record LowResCoordinate(int Value)
