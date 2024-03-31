@@ -5,7 +5,7 @@ namespace AssetTools.UCFileStructures.Maps.SuperMap;
 [Deserializer.DeserializeGenerator]
 public partial class DFacet
 {
-	[Deserializer.EnumVal(ReadStatement = "br.ReadByte()")]
+	[Deserializer.CastVal(ReadStatement = "br.ReadByte()")]
 	public FacetType FacetType { get; set; }
 
 	public byte Height { get; set; }

@@ -4,24 +4,24 @@ using System;
 
 namespace Deserializer.Templates;
 
-public class EnumValAttribute
+public class CastValAttribute
 {
-	public static readonly string Name = "Deserializer.EnumValAttribute";
+	public static readonly string Name = "Deserializer.CastValAttribute";
 
 	public static readonly string Template = /* csharp */@"
 [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = false)]
-sealed class EnumValAttribute : Attribute
+sealed class CastValAttribute : Attribute
 {
 	public string ReadStatement { get; set; }
 
-	public EnumValAttribute() {
+	public CastValAttribute() {
 	}
 }
 ";
 
 	public string ReadStatement { get; set; }
 
-	public static EnumValAttribute FromSymbol(ISymbol symbol) {
+	public static CastValAttribute FromSymbol(ISymbol symbol) {
 		var attributeData = AttributeUtils.GetAttribute(symbol, Name);
 		if (attributeData == null) {
 			throw new Exception($"Could not find attribute {Name}");
@@ -29,7 +29,7 @@ sealed class EnumValAttribute : Attribute
 
 		var readCall = AttributeUtils.GetAttributeField<string>(attributeData, nameof(ReadStatement));
 
-		return new EnumValAttribute() {
+		return new CastValAttribute() {
 			ReadStatement = readCall,
 		};
 	}

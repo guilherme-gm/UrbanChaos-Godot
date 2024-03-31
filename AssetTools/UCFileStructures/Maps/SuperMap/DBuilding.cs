@@ -15,6 +15,6 @@ public partial class DBuilding
 	/** If this building is a warehouse, this is an index into the WARE_ware[] array */
 	public byte Ware { get; set; }
 
-	[Deserializer.EnumVal(ReadStatement = "br.ReadByte()")]
+	[Deserializer.CastVal(ReadStatement = "br.ReadByte()")]
 	public BuildingType Type { get; set; }
 }
