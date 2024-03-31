@@ -100,6 +100,20 @@ private static <FieldType> <FunctionName>(<ClassName> value, BinaryReader br) {
 }
 ```
 
+#### `EnumVal(ReadStatement = string)`
+Casts the results of `ReadStatement` to the field type.
+
+Example:
+```C#
+// ReadStatement = br.ReadUInt32()
+Field = (FieldType) br.ReadUInt32();
+```
+
+Generally, it is expected that `ReadStatement` execution will return a number (`int` / `short` / `byte` / etc) and that the field type is able to cast a int to its type.
+
+Use this when reading enum fields.
+
+
 #### `FixedArray(Dimensions = int[])`
 Determines that this field is an array with a fixed size and the given dimensions. You may have as many dimensions as needed.
 
