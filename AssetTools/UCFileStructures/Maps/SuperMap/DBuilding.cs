@@ -14,5 +14,7 @@ public partial class DBuilding
 	public ushort Padding { get; set; }
 	/** If this building is a warehouse, this is an index into the WARE_ware[] array */
 	public byte Ware { get; set; }
-	public byte Type { get; set; }
+
+	[Deserializer.EnumVal(ReadStatement = "br.ReadByte()")]
+	public BuildingType Type { get; set; }
 }
