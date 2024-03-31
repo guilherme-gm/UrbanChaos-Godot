@@ -15,4 +15,11 @@ public struct Mapwho
 	/// How many instances of this object is present in this space
 	/// </summary>
 	public int Num;
+
+	public static explicit operator Mapwho(ushort value) {
+		return new Mapwho() {
+			Index = value & ((1 << 11) - 1),
+			Num = value >> 11,
+		};
+	}
 }
