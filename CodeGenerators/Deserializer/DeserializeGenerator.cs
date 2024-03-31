@@ -92,9 +92,7 @@ public class DeserializeGenerator : ISourceGenerator
 			}
 
 			IReader reader;
-			if (AttributeUtils.HasAttribute(prop.FieldSymbol, CastValAttribute.Name)) {
-				reader = new CastValReader(prop);
-			} else if (AttributeUtils.HasAttribute(prop.FieldSymbol, FlagsListAttribute.Name)) {
+			if (AttributeUtils.HasAttribute(prop.FieldSymbol, FlagsListAttribute.Name)) {
 				reader = new FlagsListReader(prop);
 			} else if (AttributeUtils.HasAttribute(prop.FieldSymbol, VariableSizedArrayAttribute.Name)) {
 				reader = new VariableSizedArrayReader(prop);
@@ -104,6 +102,8 @@ public class DeserializeGenerator : ISourceGenerator
 				reader = new FixedArrayReader(prop);
 			} else if (AttributeUtils.HasAttribute(prop.FieldSymbol, DeserializeFnAttribute.Name)) {
 				reader = new DeserializeFnReader(className, prop);
+			} else if (AttributeUtils.HasAttribute(prop.FieldSymbol, CastValAttribute.Name)) {
+				reader = new CastValReader(prop);
 			} else {
 				reader = new BasicReader(prop);
 			}

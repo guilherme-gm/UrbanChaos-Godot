@@ -20,6 +20,9 @@ public class BasicReader : IReader
 			}
 
 			this.ReadingCall = $"{descriptor.FieldTypeFullname}.Deserialize(br{additionalParams})";
+		} else if (AttributeUtils.HasAttribute(descriptor.FieldSymbol, CastValAttribute.Name)) {
+			var reader = new CastValReader(descriptor);
+			this.ReadingCall = reader.GetCode();
 		} else {
 			this.ReadingCall = $"br.Read{descriptor.FieldType}()";
 		}

@@ -89,6 +89,8 @@ Those attributes directly affect how a Field is deserialized, usually they don't
 #### `CastVal(ReadStatement = string)`
 Casts the results of `ReadStatement` to the field type.
 
+**This attribute _may_ be used together with Array-related attributes.**
+
 Example:
 ```C#
 // ReadStatement = br.ReadUInt32()

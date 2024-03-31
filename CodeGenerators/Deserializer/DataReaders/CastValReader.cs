@@ -20,4 +20,8 @@ public class CastValReader : IReader
 	public string GetTemplate() {
 		return @"value.{{FieldName}} = ({{FieldType}}){{ReadStatement}};";
 	}
+
+	public string GetCode() {
+		return $"({this.FieldType}){this.ReadStatement}";
+	}
 }
