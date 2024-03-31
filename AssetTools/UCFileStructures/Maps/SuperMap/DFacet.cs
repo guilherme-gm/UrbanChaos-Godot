@@ -1,3 +1,5 @@
+using AssetTools.Utils;
+
 namespace AssetTools.UCFileStructures.Maps.SuperMap;
 
 [Deserializer.DeserializeGenerator]
@@ -13,7 +15,8 @@ public partial class DFacet
 	/** these are bytes because they are grid based  */
 	[Deserializer.FixedArray(Dimensions = [2])]
 	public byte[] Z { get; set; }
-	public ushort FacetFlags { get; set; }
+	[Deserializer.FlagsList(ReadStatement = "br.ReadUInt16()")]
+	public Flags<FacetFlag> FacetFlags { get; set; }
 	public ushort StyleIndex { get; set; }
 	public ushort Building { get; set; }
 	public ushort DStorey { get; set; }
