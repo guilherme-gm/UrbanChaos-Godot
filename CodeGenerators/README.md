@@ -124,6 +124,20 @@ public string MyString { get; set; }
 ```
 
 
+#### `FlagsList(ReadStatement = string)`
+This is meant to be used with `Flags<T>` type.
+
+It performs `ReadStatement` code and pass it as parameter to `T.FromNumber`. Example:
+```C#
+// ReadStatement = br.ReadUInt32()
+Field = T.FromNumber(br.ReadUInt32());
+```
+
+Generally, it is expected that `ReadStatement` execution will return an `uint`-compatible value (`uint` / `ushort` / `byte`).
+
+Use this when reading bit-flags fields.
+
+
 #### `Nested(AdditionalParameters? = string[])`
 This field must be deserialized by their own `Deserialize` method.
 
