@@ -1,4 +1,5 @@
 using AssetTools.UCFileStructures.Maps;
+using AssetTools.Utils;
 using Godot;
 
 namespace AssetTools.Structures;
@@ -8,7 +9,7 @@ public class FloorStore
 {
 	public int Colour { get; set; }
 	public float Alt { get; set; }
-	public MapFlag[] Flags;   // not really needed
+	public Flags<MapFlag> Flags;   // not really needed
 
 	public int TexturePage; // 309 runs "general steam" whatever this is. Maybe uses the remaining part of Texture
 

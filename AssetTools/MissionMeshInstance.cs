@@ -58,19 +58,19 @@ public partial class MissionMeshInstance : MeshInstance3D
 		int vertexCount = 0;
 		foreach (var floor in mission.Map.FloorStores) {
 			// @TODO: Implement shadows
-			var isShadow = floor.Flags.Any((v) => v == MapFlag.Shadow1 || v == MapFlag.Shadow2 || v == MapFlag.Shadow3);
+			var isShadow = floor.Flags.IsAnySet([MapFlag.Shadow1, MapFlag.Shadow2, MapFlag.Shadow3]);
 			if (isShadow) {
 				GD.Print($"Skipping shadows");
 				continue;
 			}
 
-			if (floor.Flags.Contains(MapFlag.RoofExists)) {
+			if (floor.Flags.IsSet(MapFlag.RoofExists)) {
 				GD.Print("There are roofs");
 				// @TODO: y = floor.Height;
 			}
 
 			var dy = 0f;
-			if (floor.Flags.Contains(MapFlag.SinkSquare) /* && !isWarehouse */) {
+			if (floor.Flags.IsSet(MapFlag.SinkSquare) /* && !isWarehouse */) {
 				GD.Print("There are SinkSquare");
 				dy = -32f;
 			}

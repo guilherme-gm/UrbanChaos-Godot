@@ -2,7 +2,6 @@ using AssetTools.Structures;
 using AssetTools.UCFileStructures.Maps.SuperMap;
 using Godot;
 using System;
-using System.Linq;
 
 namespace AssetTools.Addons.Asset_Tools;
 
@@ -67,7 +66,7 @@ public partial class MissionTree : Tree
 				_ = this.CreateItem(
 					mapHiNode,
 					$"Item ({i / 128}, {i % 128})",
-					$"Texture = {item.Texture} ; Flags = [{String.Join(", ", item.Flags.Select(v => v.Name))}] ; Alt = {item.Altitude} ; Height = {item.Height}"
+					$"Texture = {item.Texture} ; Flags = {item.Flags} ; Alt = {item.Altitude} ; Height = {item.Height}"
 				);
 				/*
 				_ = this.CreateItem(itemNode, "Texture", item.Texture.ToString());
@@ -98,7 +97,7 @@ public partial class MissionTree : Tree
 				_ = this.CreateItem(
 					mapHiNode,
 					$"Item ({i / 128}, {i % 128})",
-					$"TexturePage = {texture} ; Flags = [{String.Join(", ", item.Flags.Select(v => v.Name))}] ; Alt = {item.Alt} ; X = {item.X} ; Z = {item.Z}"
+					$"TexturePage = {texture} ; Flags = {item.Flags} ; Alt = {item.Alt} ; X = {item.X} ; Z = {item.Z}"
 				);
 				/*
 				_ = this.CreateItem(itemNode, "Texture", item.Texture.ToString());

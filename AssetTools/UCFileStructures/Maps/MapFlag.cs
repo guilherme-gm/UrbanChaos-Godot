@@ -1,6 +1,8 @@
+using AssetTools.Utils;
+
 namespace AssetTools.UCFileStructures.Maps;
 
-public record MapFlag(ushort Value, string Name)
+public record MapFlag(uint Value, string Name) : IFlagsRecord
 {
 	public static MapFlag Shadow1 { get; } = new(1 << 0, "Shadow1");
 	public static MapFlag Shadow2 { get; } = new(1 << 1, "Shadow2");
@@ -45,7 +47,28 @@ public record MapFlag(ushort Value, string Name)
 	public static MapFlag FlatRoof { get; } = new(1 << 14, "FlatRoof");
 	public static MapFlag Water { get; } = new(1 << 15, "Water");
 
-	public bool IsSet(int value) {
-		return (value & this.Value) == this.Value;
+	private static readonly MapFlag[] FlagList = [
+		Shadow1,
+		Shadow2,
+		Shadow3,
+		Reflective,
+		Hidden,
+		SinkSquare,
+		SinkPoint,
+		NoUpper,
+		NoGo,
+		AnimTMap,
+		RoofExists,
+		Zone1,
+		Zone2,
+		Zone3,
+		Zone4,
+		Wander,
+		FlatRoof,
+		Water,
+	];
+
+	public static Flags<MapFlag> FromNumber(uint value) {
+		return Flags<MapFlag>.FromNumber(value, FlagList);
 	}
 }
