@@ -12,14 +12,16 @@ public partial class DFacet
 
 	/** these are bytes because they are grid based  */
 	[Deserializer.FixedArray(Dimensions = [2])]
-	public byte[] X { get; set; }
+	[Deserializer.CastVal(ReadStatement = "br.ReadByte()")]
+	public HighResCoordinate[] X { get; set; }
 
 	[Deserializer.FixedArray(Dimensions = [2])]
 	public short[] Y { get; set; }
 
 	/** these are bytes because they are grid based  */
 	[Deserializer.FixedArray(Dimensions = [2])]
-	public byte[] Z { get; set; }
+	[Deserializer.CastVal(ReadStatement = "br.ReadByte()")]
+	public HighResCoordinate[] Z { get; set; }
 
 	[Deserializer.FlagsList(ReadStatement = "br.ReadUInt16()")]
 	public Flags<FacetFlag> FacetFlags { get; set; }
