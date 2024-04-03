@@ -1,3 +1,4 @@
+using AssetTools.Utils;
 using System.IO;
 
 namespace AssetTools.UCFileStructures.Tma;
@@ -10,16 +11,16 @@ public partial class TextureFlagsSection
 	public ushort Count2;
 
 	[Deserializer.DeserializeFn(FnName = nameof(DeserializeFlags))]
-	public byte[][] Flags;
+	public Flags<FaceFlag>[][] Flags;
 
-	public static byte[][] DeserializeFlags(TextureFlagsSection section, BinaryReader br) {
+	public static Flags<FaceFlag>[][] DeserializeFlags(TextureFlagsSection section, BinaryReader br) {
 		// @TODO: VariableSizedArray doesn't support multiple dimensions
-		var value = new byte[section.Count1][];
+		var value = new Flags<FaceFlag>[section.Count1][];
 		for (int i = 0; i < section.Count1; i++) {
-			value[i] = new byte[section.Count2];
+			value[i] = new Flags<FaceFlag>[section.Count2];
 
 			for (int j = 0; j < section.Count2; j++) {
-				value[i][j] = br.ReadByte();
+				value[i][j] = FaceFlag.FromNumber(br.ReadByte());
 			}
 		}
 

@@ -11,6 +11,7 @@ public partial class StyleTma : Resource
 {
 	public int SaveType { get; set; }
 
+	/// <summary>Unused, I think</summary>
 	[Deserializer.Condition(When = "value.SaveType >= 1 && value.SaveType < 4")]
 	[Deserializer.Nested]
 	public TextureInfoSection TextureInfoSection { get; set; }

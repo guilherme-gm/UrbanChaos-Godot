@@ -1,5 +1,6 @@
 namespace AssetTools.UCFileStructures.Tma;
 
+// Seems like this is unused
 [Deserializer.DeserializeGenerator]
 public partial class TextureInfo
 {
