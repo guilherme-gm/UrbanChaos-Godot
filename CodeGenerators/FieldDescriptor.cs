@@ -35,14 +35,13 @@ public class FieldDescriptor
 		int rank = arraySymbol.Rank;
 
 		var nextRank = arraySymbol;
-		string type = arraySymbol.ElementType.Name;
-		string typeFullname = arraySymbol.ElementType.ToDisplayString();
 		while (nextRank.ElementType is IArrayTypeSymbol arrayTypeSymbol) {
 			rank += arrayTypeSymbol.Rank;
-			type = arrayTypeSymbol.ElementType.Name;
-			typeFullname = arraySymbol.ElementType.ToDisplayString();
 			nextRank = arrayTypeSymbol;
 		}
+
+		var type = nextRank.ElementType.Name;
+		var typeFullname = nextRank.ElementType.ToDisplayString();
 
 		return new FieldDescriptor() {
 			Name = name,
