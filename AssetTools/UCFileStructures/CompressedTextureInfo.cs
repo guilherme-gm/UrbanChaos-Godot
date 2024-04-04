@@ -9,39 +9,34 @@ namespace AssetTools.UCFileStructures;
 /// - Flip (2 bits)
 /// - Size (2 bits)
 /// </summary>
-[Deserializer.DeserializeGenerator]
 public partial class CompressedTextureInfo
 {
-	[Deserializer.Skip]
 	private static readonly Vector2[] Rotation0UV = [
 		new Vector2(0, 0),
 		new Vector2(1, 0),
-		new Vector2(1, 1),
 		new Vector2(0, 1),
+		new Vector2(1, 1),
 	];
 
-	[Deserializer.Skip]
 	private static readonly Vector2[] Rotation1UV = [
 		new Vector2(1, 0),
 		new Vector2(1, 1),
-		new Vector2(0, 1),
 		new Vector2(0, 0),
+		new Vector2(0, 1),
 	];
 
-	[Deserializer.Skip]
 	private static readonly Vector2[] Rotation2UV = [
 		new Vector2(1, 1),
 		new Vector2(0, 1),
-		new Vector2(0, 0),
 		new Vector2(1, 0),
+		new Vector2(0, 0),
 	];
 
-	[Deserializer.Skip]
 	private static readonly Vector2[] Rotation3UV = [
 		new Vector2(0, 1),
 		new Vector2(0, 0),
-		new Vector2(1, 0),
 		new Vector2(1, 1),
+		new Vector2(1, 0),
 	];
 
 	/// <summary>
@@ -51,37 +46,37 @@ public partial class CompressedTextureInfo
 	/// 12th and 13th bits -- Flip -- (texture >> 0xc) & 0x3;
 	/// 14th and 15th bits -- Size -- (texture >> 0xe) & 0x3;
 	/// </summary>
-	private ushort CompressedTexture { get; set; }
+	public ushort CompressedValue { get; set; }
 
-	[Deserializer.Skip]
 	public int TexturePage { get; set; }
 
-	[Deserializer.Skip]
 	public int TextureRotation { get; set; }
 
-	[Deserializer.Skip]
 	public int TextureFlip { get; set; }
 
-	[Deserializer.Skip]
 	public int TextureSize { get; set; }
 
-	[Deserializer.Skip]
 	public Vector2[] UVs { get; set; }
 
-	partial void PostDeserialize() {
-		this.TexturePage = this.CompressedTexture & 1023;
-		this.TextureRotation = (this.CompressedTexture >> 10) & 3;
-		this.TextureFlip = (this.CompressedTexture >> 12) & 3;
-		this.TextureSize = (this.CompressedTexture >> 14) & 3;
+	public static explicit operator CompressedTextureInfo(ushort value) {
+		var result = new CompressedTextureInfo() {
+			CompressedValue = value,
+			TexturePage = value & 1023,
+			TextureRotation = (value >> 10) & 3,
+			TextureFlip = (value >> 12) & 3,
+			TextureSize = (value >> 14) & 3,
+		};
 
-		switch (this.TextureRotation) {
-			case 0: this.UVs = [.. Rotation0UV]; break;
-			case 1: this.UVs = [.. Rotation1UV]; break;
-			case 2: this.UVs = [.. Rotation2UV]; break;
-			case 3: this.UVs = [.. Rotation3UV]; break;
+		switch (result.TextureRotation) {
+			case 0: result.UVs = [.. Rotation0UV]; break;
+			case 1: result.UVs = [.. Rotation1UV]; break;
+			case 2: result.UVs = [.. Rotation2UV]; break;
+			case 3: result.UVs = [.. Rotation3UV]; break;
 			default:
-				GD.PushError($"Could not create UV data for rotation {this.TextureRotation}");
+				GD.PushError($"Could not create UV data for rotation {result.TextureRotation}");
 				break;
 		}
+
+		return result;
 	}
 }
