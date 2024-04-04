@@ -2,10 +2,8 @@ using AssetTools.AssetManagers;
 using AssetTools.Structures;
 using AssetTools.UCFileStructures.Maps;
 using Godot;
-using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 
 namespace AssetTools;
 
@@ -56,43 +54,45 @@ public partial class MissionMeshInstance : MeshInstance3D
 		st.SetMaterial(this.TheMaterial);
 
 		int vertexCount = 0;
-		foreach (var floor in mission.Map.FloorStores) {
-			// @TODO: Implement shadows
-			var isShadow = floor.Flags.IsAnySet([MapFlag.Shadow1, MapFlag.Shadow2, MapFlag.Shadow3]);
-			if (isShadow) {
-				GD.Print($"Skipping shadows");
-				continue;
+		foreach (var floorX in mission.Map.FloorStores) {
+			foreach (var floor in floorX) {
+				// @TODO: Implement shadows
+				var isShadow = floor.Flags.IsAnySet([MapFlag.Shadow1, MapFlag.Shadow2, MapFlag.Shadow3]);
+				if (isShadow) {
+					GD.Print($"Skipping shadows");
+					continue;
+				}
+
+				if (floor.Flags.IsSet(MapFlag.RoofExists)) {
+					GD.Print("There are roofs");
+					// @TODO: y = floor.Height;
+				}
+
+				var dy = 0f;
+				if (floor.Flags.IsSet(MapFlag.SinkSquare) /* && !isWarehouse */) {
+					GD.Print("There are SinkSquare");
+					dy = -32f;
+				}
+
+				foreach (var idx in new int[] { 0, 1, 2, 3 }) {
+					var uv = floor.UVs[idx];
+					var realloc = this.MaterialRealloc[floor.TexturePage];
+					st.SetUV(this.ReallocUV(uv, realloc));
+					st.SetNormal(Vector3.Up);
+					st.AddVertex(floor.Vertices[idx] + new Vector3(0, dy, 0));
+					vertexCount++;
+				}
+
+				var start = vertexCount - 4;
+
+				st.AddIndex(start + 0);
+				st.AddIndex(start + 1);
+				st.AddIndex(start + 3);
+
+				st.AddIndex(start + 1);
+				st.AddIndex(start + 2);
+				st.AddIndex(start + 3);
 			}
-
-			if (floor.Flags.IsSet(MapFlag.RoofExists)) {
-				GD.Print("There are roofs");
-				// @TODO: y = floor.Height;
-			}
-
-			var dy = 0f;
-			if (floor.Flags.IsSet(MapFlag.SinkSquare) /* && !isWarehouse */) {
-				GD.Print("There are SinkSquare");
-				dy = -32f;
-			}
-
-			foreach (var idx in new int[] { 0, 1, 2, 3 }) {
-				var uv = floor.UVs[idx];
-				var realloc = this.MaterialRealloc[floor.TexturePage];
-				st.SetUV(this.ReallocUV(uv, realloc));
-				st.SetNormal(Vector3.Up);
-				st.AddVertex(floor.Vertices[idx] + new Vector3(0, dy, 0));
-				vertexCount++;
-			}
-
-			var start = vertexCount - 4;
-
-			st.AddIndex(start + 0);
-			st.AddIndex(start + 1);
-			st.AddIndex(start + 3);
-
-			st.AddIndex(start + 1);
-			st.AddIndex(start + 2);
-			st.AddIndex(start + 3);
 
 		}
 
@@ -100,9 +100,11 @@ public partial class MissionMeshInstance : MeshInstance3D
 	}
 
 	private void LoadMaterials(Mission mission, string textureSet) {
+		GD.Print(mission, textureSet);
+		/*
 		this.MaterialRealloc = [];
 		var textures = mission.Map.FloorStores
-			.Select((floor) => floor.TexturePage)
+			.Select((floor) => floor[0].TexturePage)
 			.Distinct()
 			.ToArray();
 
@@ -159,6 +161,7 @@ public partial class MissionMeshInstance : MeshInstance3D
 		};
 
 		this.TheMaterial = material;
+		*/
 	}
 
 	public void LoadMission(string path, string textureSet = "") {

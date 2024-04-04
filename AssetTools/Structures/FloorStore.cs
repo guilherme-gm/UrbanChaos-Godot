@@ -28,13 +28,13 @@ public class FloorStore
 		var x = index / 128;
 		var z = index % 128;
 
-		var alt = mapHi.Altitude;
+		var alt = mapHi.Alt;
 		var size = 1f;
 		var size2 = 1f; // originally, this is 256, but this is extremally HUGE
 
 		return new FloorStore() {
 			Colour = 0, // Converted from night data (cache_a_row)
-			Alt = alt,
+			Alt = alt.Value,
 			Flags = mapHi.Flags,
 			TexturePage = mapHi.Texture.TexturePage,
 			X = x,
@@ -42,13 +42,13 @@ public class FloorStore
 			// @TODO: In original one, it checks 2 floors and calculates Y / ALT based on both.
 			//        Also takes Kerbs into account
 			Vertices = [
-				new Vector3(x * size2, alt * size, z * size2),
-				new Vector3((x + 1) * size2, alt * size, z * size2),
-				new Vector3((x + 1) * size2, alt * size, (z + 1) * size2),
-				new Vector3(x * size2, alt * size, (z + 1) * size2),
+				new Vector3(x * size2, alt.Value * size, z * size2),
+				new Vector3((x + 1) * size2, alt.Value * size, z * size2),
+				new Vector3((x + 1) * size2, alt.Value * size, (z + 1) * size2),
+				new Vector3(x * size2, alt.Value * size, (z + 1) * size2),
 			],
 			UVs = mapHi.Texture.UVs,
-			Height = mapHi.Height,
+			Height = mapHi.Height.Value,
 		};
 	}
 }

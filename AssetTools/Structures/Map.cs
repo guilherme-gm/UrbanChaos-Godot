@@ -15,7 +15,7 @@ public class Map
 
 	public int SaveType => this.IamFile.SaveType;
 	public int OBSize => this.IamFile.OBSize;
-	public MapHi[] HighResMap => this.IamFile.Map;
+	public MapHi[][] HighResMap => this.IamFile.HighResMap;
 	public MapThingPsxSection MapThingPsxSection => this.IamFile.MapThingPsxSection;
 	public LoadGameThingSection LoadGameThingSection => this.IamFile.LoadGameThingSection;
 	public SuperMapSection SuperMap => this.IamFile.SuperMap;
@@ -25,7 +25,9 @@ public class Map
 	public string OBSizeString => this.SaveType > 23 ? this.OBSize.ToString() : "N/A";
 	public string TextureSetString => this.SaveType >= 20 ? this.TextureSet.ToString() : "N/A";
 
-	public FloorStore[] FloorStores => this.HighResMap.Select(FloorStore.FromMapHi).ToArray();
+	public FloorStore[][] FloorStores => this.HighResMap.Select(
+		(row) => row.Select(FloorStore.FromMapHi).ToArray()
+	).ToArray();
 
 	public List<MapObject> MapObjects {
 		get {

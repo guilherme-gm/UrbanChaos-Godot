@@ -61,19 +61,21 @@ public partial class MissionTree : Tree
 
 		if (this.DrawHighResNodes) {
 			for (int i = 0; i < highResMap.Length; i++) {
-				var item = highResMap[i];
+				for (int j = 0; j < highResMap[i].Length; j++) {
+					var item = highResMap[i][j];
 
-				_ = this.CreateItem(
-					mapHiNode,
-					$"Item ({i / 128}, {i % 128})",
-					$"Texture = {item.Texture} ; Flags = {item.Flags} ; Alt = {item.Altitude} ; Height = {item.Height}"
-				);
-				/*
-				_ = this.CreateItem(itemNode, "Texture", item.Texture.ToString());
-				_ = this.CreateItem(itemNode, "Flags", item.Flags.ToString());
-				_ = this.CreateItem(itemNode, "Alt", item.Alt.ToString());
-				_ = this.CreateItem(itemNode, "Height", item.Height.ToString());
-				*/
+					_ = this.CreateItem(
+						mapHiNode,
+						$"Item ({i}, {j})",
+						$"Texture = {item.Texture} ; Flags = {item.Flags} ; Alt = {item.Alt} ; Height = {item.Height}"
+					);
+					/*
+					_ = this.CreateItem(itemNode, "Texture", item.Texture.ToString());
+					_ = this.CreateItem(itemNode, "Flags", item.Flags.ToString());
+					_ = this.CreateItem(itemNode, "Alt", item.Alt.ToString());
+					_ = this.CreateItem(itemNode, "Height", item.Height.ToString());
+					*/
+				}
 			}
 		}
 	}
@@ -87,26 +89,25 @@ public partial class MissionTree : Tree
 		}
 
 		mapHiNode.Collapsed = true;
+		// if (this.DrawHighResNodes) {
+		// 	for (int i = 0; i < floorStores.Length; i++) {
+		// 		var item = floorStores[i];
 
-		if (this.DrawHighResNodes) {
-			for (int i = 0; i < floorStores.Length; i++) {
-				var item = floorStores[i];
+		// 		var texture = item.TexturePage == 309 ? "309 (General Steam)" : item.TexturePage.ToString();
 
-				var texture = item.TexturePage == 309 ? "309 (General Steam)" : item.TexturePage.ToString();
-
-				_ = this.CreateItem(
-					mapHiNode,
-					$"Item ({i / 128}, {i % 128})",
-					$"TexturePage = {texture} ; Flags = {item.Flags} ; Alt = {item.Alt} ; X = {item.X} ; Z = {item.Z}"
-				);
-				/*
-				_ = this.CreateItem(itemNode, "Texture", item.Texture.ToString());
-				_ = this.CreateItem(itemNode, "Flags", item.Flags.ToString());
-				_ = this.CreateItem(itemNode, "Alt", item.Alt.ToString());
-				_ = this.CreateItem(itemNode, "Height", item.Height.ToString());
-				*/
-			}
-		}
+		// 		_ = this.CreateItem(
+		// 			mapHiNode,
+		// 			$"Item ({i / 128}, {i % 128})",
+		// 			$"TexturePage = {texture} ; Flags = {item.Flags} ; Alt = {item.Alt} ; X = {item.X} ; Z = {item.Z}"
+		// 		);
+		// 		/*
+		// 		_ = this.CreateItem(itemNode, "Texture", item.Texture.ToString());
+		// 		_ = this.CreateItem(itemNode, "Flags", item.Flags.ToString());
+		// 		_ = this.CreateItem(itemNode, "Alt", item.Alt.ToString());
+		// 		_ = this.CreateItem(itemNode, "Height", item.Height.ToString());
+		// 		*/
+		// 	}
+		// }
 	}
 
 	private void DrawLoadGameThing(TreeItem mapNode) {
