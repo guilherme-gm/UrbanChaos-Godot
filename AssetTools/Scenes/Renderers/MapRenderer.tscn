@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://bf0cpeaumriwd"]
+
+[ext_resource type="Script" path="res://Scenes/Renderers/MapRenderer.cs" id="1_umiee"]
+[ext_resource type="PackedScene" uid="uid://bcpxbcc2pmcwc" path="res://Scenes/Renderers/FloorRenderer.tscn" id="2_3uibs"]
+
+[node name="MapRenderer" type="Node3D" node_paths=PackedStringArray("FloorRenderer")]
+script = ExtResource("1_umiee")
+FloorRenderer = NodePath("FloorRenderer")
+
+[node name="FloorRenderer" parent="." instance=ExtResource("2_3uibs")]
