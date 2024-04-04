@@ -9,10 +9,13 @@ public partial class MapRenderer : Node3D
 	[Export]
 	private FloorRenderer FloorRenderer { get; set; }
 
+	private string TextureClump { get; set; } = "";
+
 	private UCMap Map { get; set; }
 
-	public void SetMap(UCMap map) {
+	public void SetMap(string textureClump, UCMap map) {
 		this.Map = map;
-		this.FloorRenderer.SetFloorFaces(this.Map.FloorFaces);
+		this.TextureClump = textureClump;
+		this.FloorRenderer.SetFloorFaces(this.TextureClump, this.Map.FloorFaces);
 	}
 }

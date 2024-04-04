@@ -23,7 +23,6 @@ public class MapLoader
 		// 3. Structures must be in a digestable format
 		var floorConverter = new FloorConverter(this.Map);
 		this.Map.FloorFaces = floorConverter.Convert();
-		GD.Print($"Converting... {this.Map.FloorFaces.Count}");
 	}
 
 	public UCMap LoadFomFile(string path) {

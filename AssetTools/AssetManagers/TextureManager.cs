@@ -1,4 +1,6 @@
 using AssetTools.UCFileStructures;
+using Godot;
+using System;
 using System.IO;
 using System.Linq;
 
@@ -72,5 +74,25 @@ public class TextureManager
 			.ToArray();
 
 		return fileList;
+	}
+
+	public Material LoadMaterial(string clumpName, int texturePage) {
+		// @TODO: Maybe it is better to create those materials and reference them instead of making everything in memory?
+		var texturePath = GetWorkDirPath(clumpName, $"tex{texturePage.ToString().PadLeft(3, '0')}.tga");
+		if (!File.Exists(texturePath)) {
+			throw new FileNotFoundException($"Could not find texture ${texturePath}");
+		}
+
+		var image = new Image();
+		if (image.Load(texturePath) != Error.Ok) {
+			throw new Exception($"Failed to load texture at {texturePath}");
+		}
+
+		var texture = new ImageTexture();
+		texture.SetImage(image);
+
+		return new StandardMaterial3D {
+			AlbedoTexture = texture
+		};
 	}
 }

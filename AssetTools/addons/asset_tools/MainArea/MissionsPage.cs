@@ -87,7 +87,8 @@ public partial class MissionsPage : VBoxContainer
 		var fileName = this.FileTree.GetSelected().GetMetadata(0).AsString();
 		var mission = MissionsManager.Instance.LoadMission(fileName);
 		var map = MapManager.Instance.LoadUCMap(mission.UcmFile.MapName);
-		this.MapRenderer.SetMap(map);
+		var clumpName = fileName.Replace(".ucm", ".txc");
+		this.MapRenderer.SetMap(clumpName, map);
 		this.MapRenderer.Visible = true;
 		this.MissionTreeArea.SetMission(mission);
 	}
