@@ -10,10 +10,10 @@ public partial class Iam
 	[Deserializer.Condition(When = $"value.{nameof(SaveType)} > 23")]
 	public int OBSize { get; set; }
 
-	/** The hi-res map. */
-	[Deserializer.FixedArray(Dimensions = [128 * 128])]
+	/** The hi-res map. [x][z] */
+	[Deserializer.FixedArray(Dimensions = [128, 128])]
 	[Deserializer.Nested]
-	public MapHi[] Map { get; set; }
+	public MapHi[][] HighResMap { get; set; }
 
 	/** PSX (".pam") has some extra stuff here for rooftops (save_psx&&save_type>=26) */
 
