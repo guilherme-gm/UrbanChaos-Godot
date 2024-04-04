@@ -1,10 +1,11 @@
-[gd_scene load_steps=4 format=3 uid="uid://bm8ic4a58lgw1"]
+[gd_scene load_steps=5 format=3 uid="uid://bm8ic4a58lgw1"]
 
 [ext_resource type="Script" path="res://addons/asset_tools/MainArea/MissionsPage.cs" id="1_xbbof"]
+[ext_resource type="PackedScene" uid="uid://bf0cpeaumriwd" path="res://Scenes/Renderers/MapRenderer.tscn" id="2_1t4jf"]
 [ext_resource type="PackedScene" uid="uid://b6o4gb0wtpatt" path="res://MissionMeshInstance.tscn" id="2_s05sx"]
 [ext_resource type="PackedScene" uid="uid://chh28n18j0w8x" path="res://addons/asset_tools/MainArea/MissionTreeArea.tscn" id="3_nmbd8"]
 
-[node name="Missions" type="VBoxContainer" node_paths=PackedStringArray("FileTree", "SearchTxt", "Camera", "TextureSetOptions", "MissionTreeArea", "MissionMeshInstance")]
+[node name="Missions" type="VBoxContainer" node_paths=PackedStringArray("FileTree", "SearchTxt", "Camera", "TextureSetOptions", "MissionTreeArea", "MissionMeshInstance", "MapRenderer")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -17,6 +18,7 @@ Camera = NodePath("TextureSetsPage/PanelContainer/TabContainer/Map Visualization
 TextureSetOptions = NodePath("HBoxContainer/TextureSetOpt")
 MissionTreeArea = NodePath("TextureSetsPage/PanelContainer/TabContainer/Tree View")
 MissionMeshInstance = NodePath("TextureSetsPage/PanelContainer/TabContainer/Map Visualization/SubViewportContainer/SubViewport/MissionMeshInstance")
+MapRenderer = NodePath("TextureSetsPage/PanelContainer/TabContainer/Map Visualization/SubViewportContainer/SubViewport/MapRenderer")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 2
@@ -151,7 +153,10 @@ handle_input_locally = false
 size = Vector2i(990, 582)
 render_target_update_mode = 4
 
+[node name="MapRenderer" parent="TextureSetsPage/PanelContainer/TabContainer/Map Visualization/SubViewportContainer/SubViewport" instance=ExtResource("2_1t4jf")]
+
 [node name="MissionMeshInstance" parent="TextureSetsPage/PanelContainer/TabContainer/Map Visualization/SubViewportContainer/SubViewport" instance=ExtResource("2_s05sx")]
+visible = false
 
 [node name="Camera3D" type="Camera3D" parent="TextureSetsPage/PanelContainer/TabContainer/Map Visualization/SubViewportContainer/SubViewport"]
 transform = Transform3D(1.19249e-08, 0.5, -0.866025, 0, 0.866025, 0.5, 1, -5.96244e-09, 1.03272e-08, -10, 20, 60)

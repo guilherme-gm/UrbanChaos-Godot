@@ -1,5 +1,6 @@
 using AssetTools.Structures;
 using AssetTools.UCFileStructures.Maps;
+using AssetTools.UCWorld.Maps;
 using Godot;
 using System;
 using System.IO;
@@ -25,6 +26,11 @@ public class MapManager
 			IamFilePath = mapPath,
 			IamStatus = AssetLoadStatus.Loaded,
 		};
+	}
+
+	public UCMap LoadUCMap(string mapPath) {
+		var filePath = GetUCMapPath(mapPath);
+		return new MapLoader().LoadFomFile(filePath);
 	}
 
 	public bool TryLoadMap(string mapPath, out Map map) {

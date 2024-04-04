@@ -1,4 +1,5 @@
 using AssetTools.AssetManagers;
+using AssetTools.UCWorld.Maps;
 using Godot;
 
 namespace AssetTools.Addons.Asset_Tools;
@@ -23,6 +24,9 @@ public partial class MissionsPage : VBoxContainer
 
 	[Export]
 	private MissionMeshInstance MissionMeshInstance { get; set; }
+
+	[Export]
+	private MapRenderer MapRenderer { get; set; }
 
 	private string[] MapFilesList { get; set; }
 
@@ -82,9 +86,10 @@ public partial class MissionsPage : VBoxContainer
 	public void OnTreeItemSelected() {
 		var fileName = this.FileTree.GetSelected().GetMetadata(0).AsString();
 		var mission = MissionsManager.Instance.LoadMission(fileName);
+		var map = MapManager.Instance.LoadUCMap(mission.UcmFile.MapName);
+		this.MapRenderer.SetMap(map);
+		this.MapRenderer.Visible = true;
 		this.MissionTreeArea.SetMission(mission);
-		this.MissionMeshInstance.LoadMission(mission, this.TextureSetOptions.Text);
-		this.MissionMeshInstance.Visible = true;
 	}
 
 #pragma warning disable IDE0060 // Remove unused parameter -- part of API
