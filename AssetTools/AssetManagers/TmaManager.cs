@@ -1,4 +1,6 @@
+using AssetTools.Structures;
 using AssetTools.UCFileStructures.Tma;
+using AssetTools.UCWorld.Textures;
 using System.IO;
 using System.Linq;
 
@@ -18,11 +20,18 @@ public class TmaManager
 		return fileList;
 	}
 
-	public StyleTma LoadFile(string path) {
+	public TextureStyle LoadFile(string path) {
 		var filePath = Path.Join(AssetPathManager.Instance.UCFolderPath, "server/textures", path);
 		using var fs = new FileStream(filePath, FileMode.Open);
 		using var br = new BinaryReader(fs);
 
-		return StyleTma.Deserialize(br);
+		return new TextureStyle(StyleTma.Deserialize(br)) {
+			TmaStatus = AssetLoadStatus.Loaded,
+			TmaFilePath = filePath,
+		};
+	}
+
+	public TextureStyle LoadFile(int id) {
+		return this.LoadFile(Path.Join($"world{id}", "style.tma"));
 	}
 }

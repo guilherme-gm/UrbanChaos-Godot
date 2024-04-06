@@ -27,7 +27,7 @@ public partial class TextureSetsPage : VBoxContainer
 		var name = item.GetText(0);
 
 		var tma = TmaManager.Instance.LoadFile(name);
-		foreach (var styleName in tma.TextureStyleNameSection.Names) {
+		foreach (var styleName in tma.TmaFile.TextureStyleNameSection.Names) {
 			GD.Print(styleName);
 		}
 
