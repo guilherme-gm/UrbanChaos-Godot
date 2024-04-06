@@ -23,6 +23,9 @@ public class MapLoader
 		// 3. Structures must be in a digestable format
 		var floorConverter = new FloorConverter(this.Map);
 		this.Map.FloorFaces = floorConverter.Convert();
+
+		var facetConverter = new FacetsConverter(this.Map);
+		this.Map.Facets = facetConverter.Convert();
 	}
 
 	public UCMap LoadFomFile(string path) {
@@ -46,6 +49,7 @@ public class MapLoader
 		}
 		catch (Exception exception) {
 			GD.PushError($"Failed to load map file. {exception.Message}");
+			GD.PushError(exception);
 			if (this.Map.Iam == null) {
 				this.Map.Iam = new FileContainer<Iam>(null, path, AssetLoadStatus.Error);
 			} else {

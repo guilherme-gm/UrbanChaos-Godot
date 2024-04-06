@@ -13,4 +13,6 @@ public class UCMap
 	public FileContainer<Iam> Iam { get; set; }
 
 	public List<FloorFace> FloorFaces { get; set; }
+
+	public List<Facet> Facets { get; set; }
 }
