@@ -22,7 +22,7 @@ public partial class SuperMapSection
 	public DFacet[] DFacets { get; set; }
 
 	[Deserializer.VariableSizedArray(SizePropertyName = nameof(DStyleCount))]
-	public ushort[] DStyles { get; set; }
+	public short[] DStyles { get; set; }
 
 
 	[Deserializer.Condition(When = $"{nameof(Iam.SaveType)} >= 17")]

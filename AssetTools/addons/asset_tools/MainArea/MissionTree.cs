@@ -204,7 +204,7 @@ public partial class MissionTree : Tree
 		this.DrawArrayNode(mapNode, "SuperMap/DFacet", this.Mission.Map.IamFile.SuperMap.DFacets,
 			(DFacet v) => $"FacetType = {v.FacetType} ; Height = {v.Height} ; X = [{v.X[0]}, {v.X[1]}] ; Y = [{v.Y[0]}, {v.Y[1]}] ; Z = [{v.Z[0]}, {v.Z[1]}] ; FacetFlags = {v.FacetFlags} ; StyleIndex = {v.StyleIndex} ; Building = {v.Building} ; DStorey = {v.DStorey} ; FHeight = {v.FHeight} ; BlockHeight = {v.BlockHeight} ; Open = {v.Open} ; Dfcache = {v.Dfcache} ; Shake = {v.Shake} ; CutHole = {v.CutHole} ; Counter = [{v.Counter[0]}, {v.Counter[1]}]");
 		this.DrawArrayNode(mapNode, "SuperMap/DStyles", this.Mission.Map.IamFile.SuperMap.DStyles,
-			(ushort v) => $"{v}");
+			(short v) => $"{v}");
 		this.DrawArrayNode(mapNode, "SuperMap/PaintMem", this.Mission.Map.IamFile.SuperMap.PaintMem,
 			(byte v) => $"{v}");
 		this.DrawArrayNode(mapNode, "SuperMap/DStoreys", this.Mission.Map.IamFile.SuperMap.DStoreys,
