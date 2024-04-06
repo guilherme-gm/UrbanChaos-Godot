@@ -24,7 +24,15 @@ public partial class FacetRenderer : Node3D
 		SurfaceTool st = new SurfaceTool();
 
 		st.Begin(Mesh.PrimitiveType.Triangles);
-		st.SetMaterial(TextureManager.Instance.LoadMaterial(this.TextureClump, texturePage));
+
+		/**
+		 * Original code disables culling for facets rendering.
+		 * From a few tests, it seems like simply making the Indexes in a Clock-Wise order
+		 * is enough to re-enable culling, but I chose to go the safe route.
+		 */
+		var material = TextureManager.Instance.LoadMaterial(this.TextureClump, texturePage);
+		material.CullMode = BaseMaterial3D.CullModeEnum.Disabled;
+		st.SetMaterial(material);
 
 		int idx = 0;
 		foreach (var quad in quads) {
@@ -50,8 +58,6 @@ public partial class FacetRenderer : Node3D
 			idx += 4;
 		}
 
-		// st.GenerateTangents();
-		// st.GenerateNormals();
 		this.AddChild(new MeshInstance3D() {
 			Mesh = st.Commit(),
 		});

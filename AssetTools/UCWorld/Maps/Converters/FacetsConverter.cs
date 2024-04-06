@@ -498,10 +498,10 @@ public class FacetsConverter
 			 */
 
 			MapVertex[] quad = [
-				points[row1][i + 1].Clone(),
-				points[row1][i].Clone(),
 				points[row2][i + 1].Clone(),
 				points[row2][i].Clone(),
+				points[row1][i + 1].Clone(),
+				points[row1][i].Clone(),
 			];
 			quadList.Add(quad);
 

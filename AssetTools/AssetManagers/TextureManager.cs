@@ -76,7 +76,7 @@ public class TextureManager
 		return fileList;
 	}
 
-	public Material LoadMaterial(string clumpName, int texturePage) {
+	public StandardMaterial3D LoadMaterial(string clumpName, int texturePage) {
 		// @TODO: Maybe it is better to create those materials and reference them instead of making everything in memory?
 		var texturePath = GetWorkDirPath(clumpName, $"tex{texturePage.ToString().PadLeft(3, '0')}.tga");
 		if (!File.Exists(texturePath)) {
