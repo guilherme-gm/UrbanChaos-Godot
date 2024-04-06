@@ -5,6 +5,12 @@ namespace AssetTools.UCFileStructures.Maps;
 [Deserializer.DeserializeGenerator]
 public partial class Iam
 {
+	[Deserializer.Skip]
+	public static readonly int MapHiSize = 128;
+
+	[Deserializer.Skip]
+	public static readonly int MapLoSize = 32;
+
 	public int SaveType { get; set; }
 
 	[Deserializer.Condition(When = $"value.{nameof(SaveType)} > 23")]

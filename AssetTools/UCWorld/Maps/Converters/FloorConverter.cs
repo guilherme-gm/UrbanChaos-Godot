@@ -90,8 +90,8 @@ public class FloorConverter
 
 		bool isWarehouse = false;
 		var floorFaces = new List<FloorFace>();
-		for (int z = 0; z < 128 - 1; z++) {
-			for (int x = 0; x < 128 - 1; x++) {
+		for (int z = 0; z < Iam.MapHiSize - 1; z++) {
+			for (int x = 0; x < Iam.MapHiSize - 1; x++) {
 				var floor1 = this.FloorCells[x][z];
 				var floor2 = this.FloorCells[x + 1][z];
 				// @TODO: Warehouse stuff
