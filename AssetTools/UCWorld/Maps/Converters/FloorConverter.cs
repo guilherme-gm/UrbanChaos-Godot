@@ -27,19 +27,6 @@ public class FloorConverter
 		this.UCMap = ucMap;
 	}
 
-	private int SetupMinitextureUV(CompressedTextureInfo texture, int page, MapVertex v0, MapVertex v1, MapVertex v2, MapVertex v3) {
-		v0.UV = texture.UVs[0];
-		v1.UV = texture.UVs[1];
-		v2.UV = texture.UVs[2];
-		v3.UV = texture.UVs[3];
-
-		if (page > 1408) { // TEXTURE_NUM_STANDARD
-			return 0;
-		} else {
-			return page;
-		}
-	}
-
 	private void GenerateFloorCells() {
 		this.FloorCells = new FloorCell[this.Iam.HighResMap.Length][];
 		// Convert floor -- cache_a_row
@@ -115,7 +102,7 @@ public class FloorConverter
 				var vertices = this.MakeVertices(x, z);
 
 				// 3 and 2 are intentionally swapped!
-				_ = this.SetupMinitextureUV(floor1.Texture, 0, vertices[0], vertices[1], vertices[3], vertices[2]);
+				_ = floor1.Texture.SetupMinitextureUV(0, vertices[0], vertices[1], vertices[3], vertices[2]);
 
 				if (!isWarehouse && floor1.Flags.IsSet(MapFlag.RoofExists)) {
 					float y = this.Iam.HighResMap[x][z].Height.ToMap().Value;

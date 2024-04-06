@@ -1,3 +1,4 @@
+using AssetTools.UCWorld;
 using Godot;
 
 namespace AssetTools.UCFileStructures;
@@ -78,5 +79,18 @@ public partial class CompressedTextureInfo
 		}
 
 		return result;
+	}
+
+	public int SetupMinitextureUV(int page, MapVertex v0, MapVertex v1, MapVertex v2, MapVertex v3) {
+		v0.UV = this.UVs[0];
+		v1.UV = this.UVs[1];
+		v2.UV = this.UVs[2];
+		v3.UV = this.UVs[3];
+
+		if (page > 1408) { // TEXTURE_NUM_STANDARD
+			return 0;
+		} else {
+			return page;
+		}
 	}
 }
