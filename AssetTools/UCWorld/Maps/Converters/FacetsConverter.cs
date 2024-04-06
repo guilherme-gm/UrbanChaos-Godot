@@ -299,7 +299,6 @@ public class FacetsConverter
 
 	private int TextureQuad(MapVertex[] polyPoints, int textureStyle, int pos, int count, int flipx = 0) {
 		var rand = this.TextureRNG.Next() & 3;
-		int random = 0;
 
 		int texturePiece;
 		if (pos == 0) {
@@ -308,12 +307,7 @@ public class FacetsConverter
 			texturePiece = flipx != 0 ? TEXTURE_PIECE_RIGHT : TEXTURE_PIECE_LEFT;
 		} else {
 			texturePiece = this.TextureChoices[rand];
-			if (rand > 1) {
-				random = 1;
-			}
 		}
-
-		_ = random; // @TODO: Use it or delete it.
 
 		int page = 0;
 		TextureFlip flip = TextureFlip.None;
