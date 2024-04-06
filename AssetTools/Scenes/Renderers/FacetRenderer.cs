@@ -1,3 +1,4 @@
+using AssetTools.AssetManagers;
 using AssetTools.UCWorld;
 using AssetTools.UCWorld.Maps;
 using Godot;
@@ -18,49 +19,39 @@ public partial class FacetRenderer : Node3D
 		this.Render();
 	}
 
-	private void DrawFacetsWithTexture(int texturePage, List<Facet> facets) {
+	private void DrawQuadsWithTexture(int texturePage, List<MapVertex[]> quads) {
 		_ = texturePage;
 		SurfaceTool st = new SurfaceTool();
 
 		st.Begin(Mesh.PrimitiveType.Triangles);
-		// st.SetMaterial(TextureManager.Instance.LoadMaterial(this.TextureClump, texturePage));
+		st.SetMaterial(TextureManager.Instance.LoadMaterial(this.TextureClump, texturePage));
 
 		int idx = 0;
-		GD.Print(facets.Count);
-		foreach (var facet in facets) {
-			for (int row = 0; row < facet.Vertices.Length - 1; row++) {
-				for (int col = 0; col < facet.Vertices[row].Length - 1; col++) {
-					var quad = new MapVertex[] {
-						facet.Vertices[row][col + 1],
-						facet.Vertices[row][col],
-						facet.Vertices[row + 1][col + 1],
-						facet.Vertices[row + 1][col]
-					};
-
-					foreach (var vertex in quad) {
-						// st.SetUV(vertex.UV);
-						st.SetNormal(Vector3.Up);
-						st.AddVertex(vertex.Position / 256);
-					}
-
-					/**
-					 *  3 - 2
-					 *  | / |
-					 *  1 - 0
-					 */
-					st.AddIndex(idx + 0);
-					st.AddIndex(idx + 2);
-					st.AddIndex(idx + 1);
-
-					st.AddIndex(idx + 1);
-					st.AddIndex(idx + 2);
-					st.AddIndex(idx + 3);
-
-					idx += 4;
-				}
+		foreach (var quad in quads) {
+			foreach (var vertex in quad) {
+				st.SetUV(vertex.UV);
+				st.SetNormal(Vector3.Back);
+				st.AddVertex(vertex.Position / 256);
 			}
+
+			/**
+			 *  3 - 2
+			 *  | / |
+			 *  1 - 0
+			 */
+			st.AddIndex(idx + 0);
+			st.AddIndex(idx + 2);
+			st.AddIndex(idx + 1);
+
+			st.AddIndex(idx + 1);
+			st.AddIndex(idx + 2);
+			st.AddIndex(idx + 3);
+
+			idx += 4;
 		}
 
+		// st.GenerateTangents();
+		// st.GenerateNormals();
 		this.AddChild(new MeshInstance3D() {
 			Mesh = st.Commit(),
 		});
@@ -75,7 +66,21 @@ public partial class FacetRenderer : Node3D
 			return;
 		}
 
-		// @TODO: Group by texture
-		this.DrawFacetsWithTexture(0, this.Facets);
+		var textureGroups = new Dictionary<int, List<MapVertex[]>>();
+		foreach (var facet in this.Facets) {
+			foreach (var quadVertices in facet.Quads) {
+				var group = textureGroups.GetValueOrDefault(quadVertices[0].TexturePage);
+				if (group == null) {
+					group = [];
+					textureGroups[quadVertices[0].TexturePage] = group;
+				}
+
+				group.Add(quadVertices);
+			}
+		}
+
+		foreach (var group in textureGroups) {
+			this.DrawQuadsWithTexture(group.Key, group.Value);
+		}
 	}
 }

@@ -1,7 +1,9 @@
 using AssetTools.UCFileStructures.Maps;
 using AssetTools.UCFileStructures.Maps.SuperMap;
+using AssetTools.UCWorld.Textures;
 using AssetTools.UCWorld.Utils;
 using Godot;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -20,9 +22,26 @@ public class FacetsConverter
 
 	private readonly UCMap UCMap;
 
+	private FacetTextureRNG TextureRNG;
+
 	private Iam Iam => this.UCMap.Iam.Data;
 
+	private TextureStyle TextureSet => this.UCMap.TextureSet;
+
 	private readonly LoMapWhoCell[][] LoMapWho;
+
+	private const int TEXTURE_PIECE_LEFT = 0;
+	private const int TEXTURE_PIECE_RIGHT = 2;
+	private const int TEXTURE_PIECE_MIDDLE = 1;
+	private const int TEXTURE_PIECE_MIDDLE1 = 3;
+	private const int TEXTURE_PIECE_MIDDLE2 = 4;
+
+	private readonly int[] TextureChoices = [
+		TEXTURE_PIECE_MIDDLE,
+		TEXTURE_PIECE_MIDDLE,
+		TEXTURE_PIECE_MIDDLE1,
+		TEXTURE_PIECE_MIDDLE2,
+	];
 
 	public FacetsConverter(UCMap ucMap) {
 		this.UCMap = ucMap;
@@ -278,7 +297,119 @@ public class FacetsConverter
 		return direction;
 	}
 
-	private FacetTextureRNG TextureRNG;
+	private int TextureQuad(MapVertex[] polyPoints, int textureStyle, int pos, int count, int flipx = 0) {
+		var rand = this.TextureRNG.Next() & 3;
+		int random = 0;
+
+		int texturePiece;
+		if (pos == 0) {
+			texturePiece = flipx != 0 ? TEXTURE_PIECE_LEFT : TEXTURE_PIECE_RIGHT;
+		} else if (pos == count - 2) {
+			texturePiece = flipx != 0 ? TEXTURE_PIECE_RIGHT : TEXTURE_PIECE_LEFT;
+		} else {
+			texturePiece = this.TextureChoices[rand];
+			if (rand > 1) {
+				random = 1;
+			}
+		}
+
+		_ = random; // @TODO: Use it or delete it.
+
+		int page = 0;
+		TextureFlip flip = TextureFlip.None;
+		if (textureStyle < 0) {
+			GD.PushWarning("@TODO: Implement textureStyle < 0 for facet");
+			textureStyle = 0;
+		}
+
+		if (textureStyle >= 0) { // this can become a else later.
+			if (textureStyle == 0) {
+				textureStyle = 1;
+			}
+
+			if (textureStyle > this.UCMap.TextureSet.DxTextureXYs.Length) {
+				// @FIXME: What is happening? this is not in the original code. but their array is bigger...
+				GD.PushWarning($"Out of range");
+				page = 0;
+				flip = TextureFlip.None;
+			} else {
+				page = this.TextureSet.DxTextureXYs[textureStyle][texturePiece].Page;
+				flip = this.TextureSet.DxTextureXYs[textureStyle][texturePiece].Flip;
+			}
+		}
+
+		switch (flip.Id) {
+			case 0: // TextureFlip.None:
+				polyPoints[0].UV = new Vector2(0, 0);
+				polyPoints[1].UV = new Vector2(1, 0);
+				polyPoints[2].UV = new Vector2(0, 1);
+				polyPoints[3].UV = new Vector2(1, 1);
+				break;
+
+			case 1: // flip x
+				polyPoints[0].UV = new Vector2(1, 0);
+				polyPoints[1].UV = new Vector2(1, 1);
+				polyPoints[2].UV = new Vector2(0, 0);
+				polyPoints[3].UV = new Vector2(0, 1);
+				break;
+
+			case 2: // flip y
+				polyPoints[0].UV = new Vector2(1, 1);
+				polyPoints[1].UV = new Vector2(0, 1);
+				polyPoints[2].UV = new Vector2(1, 0);
+				polyPoints[3].UV = new Vector2(0, 0);
+				break;
+
+			case 3: // flip x + y
+				polyPoints[0].UV = new Vector2(0, 1);
+				polyPoints[1].UV = new Vector2(0, 0);
+				polyPoints[2].UV = new Vector2(1, 1);
+				polyPoints[3].UV = new Vector2(1, 0);
+				break;
+
+			default:
+				throw new Exception($"Invalid flip {flip}");
+		}
+
+		return page;
+	}
+
+	// SUPERFACET_create_calls -- originally creates "draw calls" with direction and texture
+	private void SetupSuperfacetTextures(DFacet facet, int count, int height) {
+		int styleIndex = facet.StyleIndex;
+		if (facet.FacetFlags.IsSet(FacetFlag.TwoTextured)) {
+			styleIndex--;
+		}
+
+		int styleIndexStep = 1;
+		if (!facet.FacetFlags.IsSet(FacetFlag.HugFloor) && facet.FacetFlags.IsAnySet([FacetFlag.TwoSided, FacetFlag.TwoSided])) {
+			styleIndexStep = 2;
+		}
+
+		this.TextureRNG = new FacetTextureRNG((uint)facet.X[0].Value, (uint)facet.Y[0], (uint)facet.Z[0].Value);
+
+		// @FIXME: This is garbage. we can probably remove, but I am keeping until I finish converting everything.
+		var __polyPoints = new MapVertex[] { new MapVertex(), new MapVertex(), new MapVertex(), new MapVertex() };
+
+		int hf = 0;
+		while (height >= 0) {
+			if (hf != 0) {
+				for (int i = 0; i < count - 1; i++) {
+					int page = this.TextureQuad(__polyPoints, this.Iam.SuperMap.DStyles[styleIndex - 1], i, count);
+
+					foreach (var pp in __polyPoints) {
+						pp.TexturePage = page;
+					}
+				}
+
+				_ = this.TextureRNG.Next();
+			}
+
+			height -= 4;
+			hf += 1;
+			styleIndex += styleIndexStep;
+		}
+	}
 
 	private MapVertex[][] CreateSuperFacetPoints(
 		float mapStartX,
@@ -347,28 +478,39 @@ public class FacetsConverter
 		return [.. points.Select<List<MapVertex>, MapVertex[]>((List<MapVertex> p) => [.. p])];
 	}
 
-	private void FillFacetPoints(MapVertex[][] points, int count, uint base_row, int foundation, int style_index, float block_height) {
-		_ = count;
-		_ = style_index;
+	private List<MapVertex[]> FillFacetPoints(MapVertex[][] points, int count, uint baseRow, int foundation, int styleIndex, float blockHeight) {
+		float vheight = blockHeight * (1.0f / 256.0f);
 
-		float vheight = block_height * (1.0f / 256.0f);
+		uint row1 = baseRow;
+		uint row2 = baseRow + 1;
 
-		uint row1 = base_row;
-		uint row2 = base_row + 1;
+		var quadList = new List<MapVertex[]>();
 
 		for (int i = 0; i < points[row1].Length - 1; i++) {
 			//
 			// The four points of this quad.
 			//
 
-			MapVertex[] quad = [
-				points[row2][i + 1],
-				points[row2][i],
-				points[row1][i + 1],
-				points[row1][i],
-			];
+			/**
+			 *  3 - 2
+			 *  | / |
+			 *  1 - 0
+			 */
 
-			// @TODO: _ = this.TextureQuad(quad, map.SuperMap.DStyles[style_index], i, count);
+			MapVertex[] quad = [
+				points[row1][i + 1].Clone(),
+				points[row1][i].Clone(),
+				points[row2][i + 1].Clone(),
+				points[row2][i].Clone(),
+			];
+			quadList.Add(quad);
+
+			int page = this.TextureQuad(quad, this.Iam.SuperMap.DStyles[styleIndex], i, count);
+			for (int j = 0; j < quad.Length; j++) {
+				// @FIXME: I Think there is a bug here. We should create new Vertexes for the overlapping points
+				//         or previous row texture gets replaced.
+				quad[j].TexturePage = page;
+			}
 
 			//
 			// Scale for block height.
@@ -408,19 +550,21 @@ public class FacetsConverter
 		{
 			_ = this.TextureRNG.Next();
 		}
+
+		return quadList;
 	}
 
-	private void BuildCalls(DFacet facet, MapVertex[][] points, int count) {
+	private List<MapVertex[]> BuildCalls(DFacet facet, MapVertex[][] points, int count) {
 		this.TextureRNG = new FacetTextureRNG((uint)facet.X[0].Value, (uint)facet.Y[0], (uint)facet.Z[0].Value);
 
-		int style_index = facet.StyleIndex;
+		int styleIndex = facet.StyleIndex;
 		if (facet.FacetFlags.IsSet(FacetFlag.TwoSided)) {
-			style_index -= 1;
+			styleIndex -= 1;
 		}
 
-		int style_index_step = 1;
+		int styleIndexStep = 1;
 		if (!facet.FacetFlags.IsSet(FacetFlag.HugFloor) && facet.FacetFlags.IsAnySet([FacetFlag.TwoTextured, FacetFlag.TwoSided])) {
-			style_index_step = 2;
+			styleIndexStep = 2;
 		}
 
 		//
@@ -431,7 +575,7 @@ public class FacetsConverter
 			foundation = 2;
 		}
 
-		float block_height = facet.BlockHeight << 4;
+		float blockHeight = facet.BlockHeight << 4;
 		int height = facet.Height;
 
 		//
@@ -439,27 +583,32 @@ public class FacetsConverter
 		// this call's texture.
 		//
 
+		var quadList = new List<MapVertex[]>();
 		uint hf = 0;
 		while (height >= 0) {
 			if (hf != 0) {
-				this.FillFacetPoints(
-					points,
-					count,
-					hf - 1,
-					foundation + 1,
-					style_index - 1,
-					block_height
+				quadList.AddRange(
+						this.FillFacetPoints(
+						points,
+						count,
+						hf - 1,
+						foundation + 1,
+						styleIndex - 1,
+						blockHeight
+					)
 				);
 			}
 
 			height -= 4;
 			hf += 1;
 			foundation -= 1;
-			style_index += style_index_step;
+			styleIndex += styleIndexStep;
 		}
+
+		return quadList;
 	}
 
-	private MapVertex[][] ConvertSuperFacet(DFacet facet) {
+	private List<MapVertex[]> ConvertSuperFacet(DFacet facet) {
 		if (facet.Dfcache == 0) {
 			// @TODO: df->Dfcache = NIGHT_dfcache_create(facet);
 		}
@@ -494,7 +643,7 @@ public class FacetsConverter
 		var blockHeight = facet.BlockHeight << 4;
 		var height = facet.Height;
 
-		// @TODO: SUPERFACET_create_calls(facet, direction);
+		this.SetupSuperfacetTextures(facet, count, height);
 
 		this.TextureRNG = new FacetTextureRNG((uint)facet.X[0].Value, (uint)facet.Y[0], (uint)facet.Z[0].Value);
 		// @TODO: SUPERFACET_colour_base = col = NIGHT_dfcache[df->Dfcache].colour;
@@ -509,12 +658,10 @@ public class FacetsConverter
 			facet.FacetFlags.IsSet(FacetFlag.HugFloor)
 		);
 
-		this.BuildCalls(facet, points, count);
-
-		return points;
+		return this.BuildCalls(facet, points, count);
 	}
 
-	private MapVertex[][] ConvertCommonFacet(DFacet facet, byte alpha) {
+	private List<MapVertex[]> ConvertCommonFacet(DFacet facet, byte alpha) {
 		if (facet.FacetFlags.IsSet(FacetFlag.Invisible)) {
 			return [];
 		}
@@ -566,7 +713,7 @@ public class FacetsConverter
 						if (IsRareFacet(facet)) {
 							ConvertRareFacet(facet, 0);
 						} else {
-							list.Add(new Facet() { Vertices = this.ConvertCommonFacet(facet, 0) });
+							list.Add(new Facet() { Quads = this.ConvertCommonFacet(facet, 0) });
 						}
 
 						if (facet.FacetType == FacetType.Normal && building != null) {

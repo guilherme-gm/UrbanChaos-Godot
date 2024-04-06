@@ -1,6 +1,8 @@
+using System.Collections.Generic;
+
 namespace AssetTools.UCWorld.Maps;
 
 public class Facet
 {
-	public MapVertex[][] Vertices { get; set; }
+	public List<MapVertex[]> Quads { get; set; }
 }

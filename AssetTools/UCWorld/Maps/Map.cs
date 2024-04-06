@@ -1,5 +1,6 @@
 using AssetTools.Structures;
 using AssetTools.UCFileStructures.Maps;
+using AssetTools.UCWorld.Textures;
 using System.Collections.Generic;
 
 namespace AssetTools.UCWorld.Maps;
@@ -11,6 +12,8 @@ namespace AssetTools.UCWorld.Maps;
 public class UCMap
 {
 	public FileContainer<Iam> Iam { get; set; }
+
+	public TextureStyle TextureSet { get; set; }
 
 	public List<FloorFace> FloorFaces { get; set; }
 

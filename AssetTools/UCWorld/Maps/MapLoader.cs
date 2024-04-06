@@ -1,3 +1,4 @@
+using AssetTools.AssetManagers;
 using AssetTools.Structures;
 using AssetTools.UCFileStructures.Maps;
 using AssetTools.UCWorld.Maps.Converters;
@@ -21,6 +22,8 @@ public class MapLoader
 		//    - Texture UV must be right
 		//    - Vertex must be right, already flipped if needed
 		// 3. Structures must be in a digestable format
+		this.Map.TextureSet = TmaManager.Instance.LoadFile(this.Map.Iam.Data.TextureSet);
+
 		var floorConverter = new FloorConverter(this.Map);
 		this.Map.FloorFaces = floorConverter.Convert();
 
