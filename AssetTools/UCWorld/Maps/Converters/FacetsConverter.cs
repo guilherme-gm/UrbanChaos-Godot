@@ -318,11 +318,29 @@ public class FacetsConverter
 		int page = 0;
 		TextureFlip flip = TextureFlip.None;
 		if (textureStyle < 0) {
-			GD.PushWarning("@TODO: Implement textureStyle < 0 for facet");
-			textureStyle = 0;
+			var storey = this.Iam.SuperMap.DStoreys[-textureStyle];
+			var index = storey.Index;
+
+			if (storey.Count == 0) {
+				GD.PushError($"Storey count is 0. Should be > 0");
+			}
+
+			if (pos < storey.Count) {
+				page = this.Iam.SuperMap.PaintMem[index + pos];
+				if ((page & 128) != 0) {
+					flip = TextureFlip.FlipX;
+					page &= 127;
+				}
+			} else {
+				textureStyle = storey.Style;
+			}
+
+			if ((page & 127) == 0) {
+				textureStyle = storey.Style;
+			}
 		}
 
-		if (textureStyle >= 0) { // this can become a else later.
+		if (textureStyle >= 0) {
 			if (textureStyle == 0) {
 				textureStyle = 1;
 			}
