@@ -9,6 +9,9 @@ public partial class MapRenderer : Node3D
 	[Export]
 	private FloorRenderer FloorRenderer { get; set; }
 
+	[Export]
+	private FacetRenderer FacetRenderer { get; set; }
+
 	private string TextureClump { get; set; } = "";
 
 	private UCMap Map { get; set; }
@@ -17,5 +20,6 @@ public partial class MapRenderer : Node3D
 		this.Map = map;
 		this.TextureClump = textureClump;
 		this.FloorRenderer.SetFloorFaces(this.TextureClump, this.Map.FloorFaces);
+		this.FacetRenderer.SetFacets(this.TextureClump, this.Map.Facets);
 	}
 }
