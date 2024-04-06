@@ -360,23 +360,23 @@ public class FacetsConverter
 
 			case 1: // flip x
 				polyPoints[0].UV = new Vector2(1, 0);
-				polyPoints[1].UV = new Vector2(1, 1);
-				polyPoints[2].UV = new Vector2(0, 0);
+				polyPoints[1].UV = new Vector2(0, 0);
+				polyPoints[2].UV = new Vector2(1, 1);
 				polyPoints[3].UV = new Vector2(0, 1);
 				break;
 
 			case 2: // flip y
+				polyPoints[0].UV = new Vector2(0, 0);
+				polyPoints[1].UV = new Vector2(1, 0);
+				polyPoints[2].UV = new Vector2(0, 0);
+				polyPoints[3].UV = new Vector2(1, 0);
+				break;
+
+			case 3: // flip x + y
 				polyPoints[0].UV = new Vector2(1, 1);
 				polyPoints[1].UV = new Vector2(0, 1);
 				polyPoints[2].UV = new Vector2(1, 0);
 				polyPoints[3].UV = new Vector2(0, 0);
-				break;
-
-			case 3: // flip x + y
-				polyPoints[0].UV = new Vector2(0, 1);
-				polyPoints[1].UV = new Vector2(0, 0);
-				polyPoints[2].UV = new Vector2(1, 1);
-				polyPoints[3].UV = new Vector2(1, 0);
 				break;
 
 			default:
