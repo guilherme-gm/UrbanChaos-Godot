@@ -3,7 +3,6 @@ using AssetTools.UCFileStructures.Maps.SuperMap;
 using AssetTools.UCWorld.Textures;
 using AssetTools.UCWorld.Utils;
 using Godot;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -33,19 +32,6 @@ public class FacetsConverter
 	private TextureStyle TextureSet => this.UCMap.TextureSet;
 
 	private readonly LoMapWhoCell[][] LoMapWho;
-
-	private const int TEXTURE_PIECE_LEFT = 0;
-	private const int TEXTURE_PIECE_RIGHT = 2;
-	private const int TEXTURE_PIECE_MIDDLE = 1;
-	private const int TEXTURE_PIECE_MIDDLE1 = 3;
-	private const int TEXTURE_PIECE_MIDDLE2 = 4;
-
-	private readonly int[] TextureChoices = [
-		TEXTURE_PIECE_MIDDLE,
-		TEXTURE_PIECE_MIDDLE,
-		TEXTURE_PIECE_MIDDLE1,
-		TEXTURE_PIECE_MIDDLE2,
-	];
 
 	public FacetsConverter(UCMap ucMap) {
 		this.UCMap = ucMap;
@@ -301,95 +287,6 @@ public class FacetsConverter
 		return direction;
 	}
 
-	private int TextureQuad(MapVertex[] polyPoints, int textureStyle, int pos, int count, int flipx = 0) {
-		var rand = this.TextureRNG.Next() & 3;
-
-		int texturePiece;
-		if (pos == 0) {
-			texturePiece = flipx != 0 ? TEXTURE_PIECE_LEFT : TEXTURE_PIECE_RIGHT;
-		} else if (pos == count - 2) {
-			texturePiece = flipx != 0 ? TEXTURE_PIECE_RIGHT : TEXTURE_PIECE_LEFT;
-		} else {
-			texturePiece = this.TextureChoices[rand];
-		}
-
-		int page = 0;
-		TextureFlip flip = TextureFlip.None;
-		if (textureStyle < 0) {
-			var storey = this.Iam.SuperMap.DStoreys[-textureStyle];
-			var index = storey.Index;
-
-			if (storey.Count == 0) {
-				GD.PushError($"Storey count is 0. Should be > 0");
-			}
-
-			if (pos < storey.Count) {
-				page = this.Iam.SuperMap.PaintMem[index + pos];
-				if ((page & 128) != 0) {
-					flip = TextureFlip.FlipX;
-					page &= 127;
-				}
-			} else {
-				textureStyle = storey.Style;
-			}
-
-			if ((page & 127) == 0) {
-				textureStyle = storey.Style;
-			}
-		}
-
-		if (textureStyle >= 0) {
-			if (textureStyle == 0) {
-				textureStyle = 1;
-			}
-
-			if (textureStyle > this.UCMap.TextureSet.DxTextureXYs.Length) {
-				// @FIXME: What is happening? this is not in the original code. but their array is bigger...
-				GD.PushWarning($"Out of range");
-				page = 0;
-				flip = TextureFlip.None;
-			} else {
-				page = this.TextureSet.DxTextureXYs[textureStyle][texturePiece].Page;
-				flip = this.TextureSet.DxTextureXYs[textureStyle][texturePiece].Flip;
-			}
-		}
-
-		switch (flip.Id) {
-			case 0: // TextureFlip.None:
-				polyPoints[0].UV = new Vector2(0, 0);
-				polyPoints[1].UV = new Vector2(1, 0);
-				polyPoints[2].UV = new Vector2(0, 1);
-				polyPoints[3].UV = new Vector2(1, 1);
-				break;
-
-			case 1: // flip x
-				polyPoints[0].UV = new Vector2(1, 0);
-				polyPoints[1].UV = new Vector2(0, 0);
-				polyPoints[2].UV = new Vector2(1, 1);
-				polyPoints[3].UV = new Vector2(0, 1);
-				break;
-
-			case 2: // flip y
-				polyPoints[0].UV = new Vector2(0, 0);
-				polyPoints[1].UV = new Vector2(1, 0);
-				polyPoints[2].UV = new Vector2(0, 0);
-				polyPoints[3].UV = new Vector2(1, 0);
-				break;
-
-			case 3: // flip x + y
-				polyPoints[0].UV = new Vector2(1, 1);
-				polyPoints[1].UV = new Vector2(0, 1);
-				polyPoints[2].UV = new Vector2(1, 0);
-				polyPoints[3].UV = new Vector2(0, 0);
-				break;
-
-			default:
-				throw new Exception($"Invalid flip {flip}");
-		}
-
-		return page;
-	}
-
 	// SUPERFACET_create_calls -- originally creates "draw calls" with direction and texture
 	private void SetupSuperfacetTextures(DFacet facet, int count, int height) {
 		int styleIndex = facet.StyleIndex;
@@ -411,7 +308,7 @@ public class FacetsConverter
 		while (height >= 0) {
 			if (hf != 0) {
 				for (int i = 0; i < count - 1; i++) {
-					int page = this.TextureQuad(__polyPoints, this.Iam.SuperMap.DStyles[styleIndex - 1], i, count);
+					int page = TextureUtils.TextureQuad(this.TextureRNG, this.UCMap, __polyPoints, this.Iam.SuperMap.DStyles[styleIndex - 1], i, count);
 
 					foreach (var pp in __polyPoints) {
 						pp.TexturePage = page;
@@ -521,7 +418,7 @@ public class FacetsConverter
 			];
 			quadList.Add(quad);
 
-			int page = this.TextureQuad(quad, this.Iam.SuperMap.DStyles[styleIndex], i, count);
+			int page = TextureUtils.TextureQuad(this.TextureRNG, this.UCMap, quad, this.Iam.SuperMap.DStyles[styleIndex], i, count);
 			for (int j = 0; j < quad.Length; j++) {
 				// @FIXME: I Think there is a bug here. We should create new Vertexes for the overlapping points
 				//         or previous row texture gets replaced.
