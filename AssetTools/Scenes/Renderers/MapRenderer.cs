@@ -12,9 +12,6 @@ public partial class MapRenderer : Node3D
 	[Export]
 	private FacetRenderer FacetRenderer { get; set; }
 
-	[Export]
-	private WalkablesRenderer WalkablesRenderer { get; set; }
-
 	private string TextureClump { get; set; } = "";
 
 	private UCMap Map { get; set; }
@@ -24,6 +21,5 @@ public partial class MapRenderer : Node3D
 		this.TextureClump = textureClump;
 		this.FloorRenderer.SetFloorFaces(this.TextureClump, this.Map.FloorFaces);
 		this.FacetRenderer.SetFacets(this.TextureClump, this.Map.Facets);
-		this.WalkablesRenderer.SetWalkables(this.TextureClump, this.Map.Walkables);
 	}
 }

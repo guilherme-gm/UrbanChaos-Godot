@@ -1,18 +1,16 @@
-[gd_scene load_steps=5 format=3 uid="uid://bf0cpeaumriwd"]
+[gd_scene load_steps=4 format=3 uid="uid://bf0cpeaumriwd"]
 
 [ext_resource type="Script" path="res://Scenes/Renderers/MapRenderer.cs" id="1_umiee"]
 [ext_resource type="PackedScene" uid="uid://bcpxbcc2pmcwc" path="res://Scenes/Renderers/FloorRenderer.tscn" id="2_3uibs"]
-[ext_resource type="PackedScene" uid="uid://dh3msl56h16np" path="res://Scenes/Renderers/FacetRenderer.tscn" id="3_g335x"]
-[ext_resource type="PackedScene" uid="uid://dkiy0h7h1mm0e" path="res://Scenes/Renderers/WalkablesRenderer.tscn" id="4_qy0t5"]
+[ext_resource type="Script" path="res://Scenes/Renderers/FacetRenderer.cs" id="3_vb6v8"]
 
 [node name="MapRenderer" type="Node3D" node_paths=PackedStringArray("FloorRenderer", "FacetRenderer", "WalkablesRenderer")]
 script = ExtResource("1_umiee")
 FloorRenderer = NodePath("FloorRenderer")
 FacetRenderer = NodePath("FacetRenderer")
-WalkablesRenderer = NodePath("WalkablesRenderer")
+WalkablesRenderer = NodePath("")
 
 [node name="FloorRenderer" parent="." instance=ExtResource("2_3uibs")]
 
-[node name="FacetRenderer" parent="." instance=ExtResource("3_g335x")]
-
-[node name="WalkablesRenderer" parent="." instance=ExtResource("4_qy0t5")]
+[node name="FacetRenderer" type="Node3D" parent="."]
+script = ExtResource("3_vb6v8")

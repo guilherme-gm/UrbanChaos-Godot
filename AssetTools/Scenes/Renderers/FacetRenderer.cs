@@ -45,16 +45,6 @@ public partial class FacetRenderer : Node3D
 				st.AddIndex(idx + index);
 			}
 			idx += poly.GetVertices().Length;
-
-			st.AddIndex(idx + 0);
-			st.AddIndex(idx + 2);
-			st.AddIndex(idx + 1);
-
-			st.AddIndex(idx + 1);
-			st.AddIndex(idx + 2);
-			st.AddIndex(idx + 3);
-
-			idx += 4;
 		}
 
 		this.AddChild(new MeshInstance3D() {

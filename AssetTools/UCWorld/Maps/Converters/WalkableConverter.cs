@@ -1,5 +1,6 @@
 using AssetTools.UCFileStructures.Maps;
 using AssetTools.UCFileStructures.Maps.SuperMap;
+using AssetTools.UCWorld.Poly;
 using Godot;
 using System.Collections.Generic;
 
@@ -29,22 +30,20 @@ public class WalkableConverter
 	}
 
 	// FACET_draw_walkable
-	public List<Walkable> ConvertBuildingWalkables(DBuilding building) {
+	public List<IPoly> ConvertBuildingWalkables(DBuilding building) {
 		bool isWarehouse = building.Type == BuildingType.Warehouse;
 
 		if (isWarehouse) {
 			// @TODO: rooftex = &WARE_rooftex[WARE_ware[p_dbuilding->Ware].rooftex];
 		}
 
-		var walkables = new List<Walkable>();
+		var walkables = new List<IPoly>();
 
 		int page = 0;
 		DWalkable walkable;
 		for (int walkableIdx = building.Walkable; walkableIdx != 0; walkableIdx = walkable.Next) {
 			walkable = this.Iam.SuperMap.WalkablesSection.DWalkables[walkableIdx];
 
-			var triangles = new List<MapVertex[]>();
-			var quads = new List<MapVertex[]>();
 			for (int i = walkable.StartFace4; i < walkable.EndFace4; i++ /* rooftex++ */) {
 				var face4 = this.Iam.SuperMap.WalkablesSection.RoofFace4s[i];
 				if (face4.DrawFlags.IsSet(RoofFace4DrawFlags.NoDraw)) {
@@ -102,22 +101,17 @@ public class WalkableConverter
 					GD.PushWarning("@TODO: Roof shadow");
 				} else {
 					if (face4.RX.DrawMode == 1) {
-						triangles.Add([quad[0], quad[1], quad[3]]);
-						triangles.Add([quad[3], quad[2], quad[0]]);
+						walkables.Add(new TrianglePoly(quad[0], quad[1], quad[3], page));
+						walkables.Add(new TrianglePoly(quad[3], quad[2], quad[0], page));
 
 						// @TODO: Implement 2pass -- POLY_add_triangle
 					} else {
-						quads.Add(quad); // // 0, 1, 2 ; 3, 2, 1
+						walkables.Add(new QuadPoly(quad[0], quad[1], quad[2], quad[3], page));
 
 						// @TODO: Implement 2pass -- POLY_add_quad
 					}
 				}
 			}
-
-			walkables.Add(new Walkable() {
-				Quads = quads,
-				Triangles = triangles,
-			});
 		}
 
 		return walkables;
