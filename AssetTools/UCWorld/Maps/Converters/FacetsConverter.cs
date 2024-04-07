@@ -26,6 +26,8 @@ public class FacetsConverter
 
 	private readonly UCMap UCMap;
 
+	private readonly RareFacetConverter RareFacetConverter;
+
 	private FacetTextureRNG TextureRNG;
 
 	private Iam Iam => this.UCMap.Iam.Data;
@@ -36,6 +38,7 @@ public class FacetsConverter
 
 	public FacetsConverter(UCMap ucMap) {
 		this.UCMap = ucMap;
+		this.RareFacetConverter = new RareFacetConverter(ucMap);
 		this.LoMapWho = new LoMapWhoCell[Iam.MapLoSize][];
 		for (int i = 0; i < Iam.MapLoSize; i++) {
 			this.LoMapWho[i] = new LoMapWhoCell[Iam.MapLoSize];
@@ -586,12 +589,6 @@ public class FacetsConverter
 		return [];
 	}
 
-	private static void ConvertRareFacet(DFacet facet, byte alpha) {
-		_ = facet;
-		_ = alpha;
-		GD.PushWarning("@TODO: Rare facet is skipped.");
-	}
-
 	public void Convert() {
 		this.LoadFacetsFromBuildings();
 		var facetsList = new List<IPoly>();
@@ -620,7 +617,7 @@ public class FacetsConverter
 						GD.PushWarning("Incomplete door");
 					} else {
 						if (IsRareFacet(facet)) {
-							ConvertRareFacet(facet, 0);
+							facetsList.AddRange(this.RareFacetConverter.Convert(facet));
 						} else {
 							facetsList.AddRange(this.ConvertCommonFacet(facet, 0));
 						}
