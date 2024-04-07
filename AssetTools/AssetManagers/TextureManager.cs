@@ -80,7 +80,8 @@ public class TextureManager
 		// @TODO: Maybe it is better to create those materials and reference them instead of making everything in memory?
 		var texturePath = GetWorkDirPath(clumpName, $"tex{texturePage.ToString().PadLeft(3, '0')}.tga");
 		if (!File.Exists(texturePath)) {
-			throw new FileNotFoundException($"Could not find texture ${texturePath}");
+			GD.PrintErr($"Could not find texture ${texturePath}");
+			return this.LoadMaterial("", -1);
 		}
 
 		var image = new Image();
