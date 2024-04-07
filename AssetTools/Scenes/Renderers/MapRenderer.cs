@@ -7,7 +7,7 @@ namespace AssetTools.UCWorld.Maps;
 public partial class MapRenderer : Node3D
 {
 	[Export]
-	private FloorRenderer FloorRenderer { get; set; }
+	private PolyListRenderer FloorRenderer { get; set; }
 
 	[Export]
 	private PolyListRenderer FacetRenderer { get; set; }
@@ -22,7 +22,7 @@ public partial class MapRenderer : Node3D
 	public void SetMap(string textureClump, UCMap map) {
 		this.Map = map;
 		this.TextureClump = textureClump;
-		this.FloorRenderer.SetFloorFaces(this.TextureClump, this.Map.FloorFaces);
+		this.FloorRenderer.SetPolyList(this.TextureClump, this.Map.FloorFaces);
 		this.FacetRenderer.SetPolyList(this.TextureClump, this.Map.Facets);
 		this.WalkableRenderer.SetPolyList(this.TextureClump, this.Map.Walkables);
 	}

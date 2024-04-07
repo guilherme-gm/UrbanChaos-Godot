@@ -2,6 +2,7 @@ using AssetTools.AssetManagers;
 using AssetTools.UCWorld.Poly;
 using Godot;
 using System.Collections.Generic;
+using static Godot.BaseMaterial3D;
 
 namespace AssetTools.Scenes.Renderers;
 
@@ -11,6 +12,9 @@ public partial class PolyListRenderer : Node3D
 	private string TextureClump { get; set; } = "";
 
 	private List<IPoly> PolyList { get; set; }
+
+	[Export]
+	private CullModeEnum CullMode;
 
 	public void SetPolyList(string textureClump, List<IPoly> polyList) {
 		this.TextureClump = textureClump;
@@ -30,14 +34,14 @@ public partial class PolyListRenderer : Node3D
 		 * is enough to re-enable culling, but I chose to go the safe route.
 		 */
 		var material = TextureManager.Instance.LoadMaterial(this.TextureClump, texturePage);
-		material.CullMode = BaseMaterial3D.CullModeEnum.Disabled;
+		material.CullMode = this.CullMode;
 		st.SetMaterial(material);
 
 		int idx = 0;
 		foreach (var poly in polys) {
 			foreach (var vertex in poly.GetVertices()) {
 				st.SetUV(vertex.UV);
-				st.SetNormal(Vector3.Back);
+				st.SetNormal(poly.GetNormal());
 				st.AddVertex(vertex.Position / 256);
 			}
 

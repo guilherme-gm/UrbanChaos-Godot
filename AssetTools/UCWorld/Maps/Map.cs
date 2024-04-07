@@ -16,7 +16,7 @@ public class UCMap
 
 	public TextureStyle TextureSet { get; set; }
 
-	public List<FloorFace> FloorFaces { get; set; }
+	public List<IPoly> FloorFaces { get; set; }
 
 	public List<IPoly> Facets { get; set; }
 

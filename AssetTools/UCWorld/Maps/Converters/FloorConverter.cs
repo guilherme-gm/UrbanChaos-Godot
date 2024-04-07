@@ -1,5 +1,6 @@
 using AssetTools.UCFileStructures;
 using AssetTools.UCFileStructures.Maps;
+using AssetTools.UCWorld.Poly;
 using AssetTools.Utils;
 using Godot;
 using System.Collections.Generic;
@@ -72,11 +73,11 @@ public class FloorConverter
 		return vertices;
 	}
 
-	public List<FloorFace> Convert() {
+	public List<IPoly> Convert() {
 		this.GenerateFloorCells();
 
 		bool isWarehouse = false;
-		var floorFaces = new List<FloorFace>();
+		var floorFaces = new List<IPoly>();
 		for (int z = 0; z < Iam.MapHiSize - 1; z++) {
 			for (int x = 0; x < Iam.MapHiSize - 1; x++) {
 				var floor1 = this.FloorCells[x][z];
@@ -121,11 +122,8 @@ public class FloorConverter
 				if (isShadow) {
 					// @TODO: Shadow
 				} else {
-					floorFaces.Add(new FloorFace() {
-						TexturePage = page,
-						// 3 and 2 intentionally swapped.
-						Vertices = [vertices[0], vertices[1], vertices[3], vertices[2]],
-					});
+					// 3 and 2 are intentionally swapped
+					floorFaces.Add(new FloorPoly(vertices[0], vertices[1], vertices[3], vertices[2], page));
 				}
 			}
 		}

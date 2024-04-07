@@ -1,7 +1,6 @@
-[gd_scene load_steps=4 format=3 uid="uid://bf0cpeaumriwd"]
+[gd_scene load_steps=3 format=3 uid="uid://bf0cpeaumriwd"]
 
 [ext_resource type="Script" path="res://Scenes/Renderers/MapRenderer.cs" id="1_umiee"]
-[ext_resource type="PackedScene" uid="uid://bcpxbcc2pmcwc" path="res://Scenes/Renderers/FloorRenderer.tscn" id="2_3uibs"]
 [ext_resource type="PackedScene" uid="uid://dh3msl56h16np" path="res://Scenes/Renderers/PolyListRenderer.tscn" id="3_pt88l"]
 
 [node name="MapRenderer" type="Node3D" node_paths=PackedStringArray("FloorRenderer", "FacetRenderer", "WalkableRenderer")]
@@ -10,8 +9,10 @@ FloorRenderer = NodePath("FloorRenderer")
 FacetRenderer = NodePath("FacetsRenderer")
 WalkableRenderer = NodePath("WalkablesRenderer")
 
-[node name="FloorRenderer" parent="." instance=ExtResource("2_3uibs")]
+[node name="FloorRenderer" parent="." instance=ExtResource("3_pt88l")]
 
 [node name="FacetsRenderer" parent="." instance=ExtResource("3_pt88l")]
+CullMode = 2
 
 [node name="WalkablesRenderer" parent="." instance=ExtResource("3_pt88l")]
+CullMode = 2

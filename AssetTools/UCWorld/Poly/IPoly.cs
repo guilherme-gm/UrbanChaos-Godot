@@ -1,3 +1,6 @@
+using Godot;
+using static Godot.BaseMaterial3D;
+
 namespace AssetTools.UCWorld.Poly;
 
 /// <summary>
@@ -23,4 +26,6 @@ public interface IPoly
 	/// </summary>
 	/// <returns></returns>
 	int[] GetIndices();
+
+	Vector3 GetNormal();
 }
