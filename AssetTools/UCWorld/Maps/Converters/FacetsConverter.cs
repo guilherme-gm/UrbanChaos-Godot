@@ -1,5 +1,6 @@
 using AssetTools.UCFileStructures.Maps;
 using AssetTools.UCFileStructures.Maps.SuperMap;
+using AssetTools.UCWorld.Poly;
 using AssetTools.UCWorld.Textures;
 using AssetTools.UCWorld.Utils;
 using Godot;
@@ -10,7 +11,7 @@ namespace AssetTools.UCWorld.Maps.Converters;
 
 public class FacetsConverter
 {
-	public List<Facet> ConvertedFacets { get; private set; }
+	public List<IPoly> ConvertedFacets { get; private set; }
 
 	public List<Walkable> ConvertedWalkables { get; private set; }
 
@@ -391,13 +392,13 @@ public class FacetsConverter
 		return [.. points.Select<List<MapVertex>, MapVertex[]>((List<MapVertex> p) => [.. p])];
 	}
 
-	private List<MapVertex[]> FillFacetPoints(MapVertex[][] points, int count, uint baseRow, int foundation, int styleIndex, float blockHeight) {
+	private List<QuadPoly> FillFacetPoints(MapVertex[][] points, int count, uint baseRow, int foundation, int styleIndex, float blockHeight) {
 		float vheight = blockHeight * (1.0f / 256.0f);
 
 		uint row1 = baseRow;
 		uint row2 = baseRow + 1;
 
-		var quadList = new List<MapVertex[]>();
+		var quadList = new List<QuadPoly>();
 
 		for (int i = 0; i < points[row1].Length - 1; i++) {
 			//
@@ -416,14 +417,8 @@ public class FacetsConverter
 				points[row1][i + 1].Clone(),
 				points[row1][i].Clone(),
 			];
-			quadList.Add(quad);
-
 			int page = TextureUtils.TextureQuad(this.TextureRNG, this.UCMap, quad, this.Iam.SuperMap.DStyles[styleIndex], i, count);
-			for (int j = 0; j < quad.Length; j++) {
-				// @FIXME: I Think there is a bug here. We should create new Vertexes for the overlapping points
-				//         or previous row texture gets replaced.
-				quad[j].TexturePage = page;
-			}
+			quadList.Add(new QuadPoly(quad[0], quad[1], quad[2], quad[3], page));
 
 			//
 			// Scale for block height.
@@ -467,7 +462,7 @@ public class FacetsConverter
 		return quadList;
 	}
 
-	private List<MapVertex[]> BuildCalls(DFacet facet, MapVertex[][] points, int count) {
+	private List<QuadPoly> BuildCalls(DFacet facet, MapVertex[][] points, int count) {
 		this.TextureRNG = new FacetTextureRNG((uint)facet.X[0].Value, (uint)facet.Y[0], (uint)facet.Z[0].Value);
 
 		int styleIndex = facet.StyleIndex;
@@ -496,12 +491,12 @@ public class FacetsConverter
 		// this call's texture.
 		//
 
-		var quadList = new List<MapVertex[]>();
+		var quadList = new List<QuadPoly>();
 		uint hf = 0;
 		while (height >= 0) {
 			if (hf != 0) {
 				quadList.AddRange(
-						this.FillFacetPoints(
+					this.FillFacetPoints(
 						points,
 						count,
 						hf - 1,
@@ -521,7 +516,7 @@ public class FacetsConverter
 		return quadList;
 	}
 
-	private List<MapVertex[]> ConvertSuperFacet(DFacet facet) {
+	private List<QuadPoly> ConvertSuperFacet(DFacet facet) {
 		if (facet.Dfcache == 0) {
 			// @TODO: df->Dfcache = NIGHT_dfcache_create(facet);
 		}
@@ -574,7 +569,7 @@ public class FacetsConverter
 		return this.BuildCalls(facet, points, count);
 	}
 
-	private List<MapVertex[]> ConvertCommonFacet(DFacet facet, byte alpha) {
+	private List<QuadPoly> ConvertCommonFacet(DFacet facet, byte alpha) {
 		if (facet.FacetFlags.IsSet(FacetFlag.Invisible)) {
 			return [];
 		}
@@ -599,7 +594,7 @@ public class FacetsConverter
 
 	public void Convert() {
 		this.LoadFacetsFromBuildings();
-		var facetsList = new List<Facet>();
+		var facetsList = new List<IPoly>();
 		var walkablesList = new List<Walkable>();
 
 		for (int z = 0; z < Iam.MapLoSize - 1; z++) {
@@ -627,7 +622,7 @@ public class FacetsConverter
 						if (IsRareFacet(facet)) {
 							ConvertRareFacet(facet, 0);
 						} else {
-							facetsList.Add(new Facet() { Quads = this.ConvertCommonFacet(facet, 0) });
+							facetsList.AddRange(this.ConvertCommonFacet(facet, 0));
 						}
 
 						if (facet.FacetType == FacetType.Normal && building != null) {

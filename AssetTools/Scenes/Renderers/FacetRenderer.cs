@@ -1,6 +1,5 @@
 using AssetTools.AssetManagers;
-using AssetTools.UCWorld;
-using AssetTools.UCWorld.Maps;
+using AssetTools.UCWorld.Poly;
 using Godot;
 using System.Collections.Generic;
 
@@ -11,15 +10,15 @@ public partial class FacetRenderer : Node3D
 {
 	private string TextureClump { get; set; } = "";
 
-	private List<Facet> Facets { get; set; }
+	private List<IPoly> Facets { get; set; }
 
-	public void SetFacets(string textureClump, List<Facet> facets) {
+	public void SetFacets(string textureClump, List<IPoly> facets) {
 		this.TextureClump = textureClump;
 		this.Facets = facets;
 		this.Render();
 	}
 
-	private void DrawQuadsWithTexture(int texturePage, List<MapVertex[]> quads) {
+	private void DrawPolysWithTexture(int texturePage, List<IPoly> polys) {
 		_ = texturePage;
 		SurfaceTool st = new SurfaceTool();
 
@@ -35,18 +34,18 @@ public partial class FacetRenderer : Node3D
 		st.SetMaterial(material);
 
 		int idx = 0;
-		foreach (var quad in quads) {
-			foreach (var vertex in quad) {
+		foreach (var poly in polys) {
+			foreach (var vertex in poly.GetVertices()) {
 				st.SetUV(vertex.UV);
 				st.SetNormal(Vector3.Back);
 				st.AddVertex(vertex.Position / 256);
 			}
 
-			/**
-			 *  3 - 2
-			 *  | / |
-			 *  1 - 0
-			 */
+			foreach (var index in poly.GetIndices()) {
+				st.AddIndex(idx + index);
+			}
+			idx += poly.GetVertices().Length;
+
 			st.AddIndex(idx + 0);
 			st.AddIndex(idx + 2);
 			st.AddIndex(idx + 1);
@@ -72,21 +71,19 @@ public partial class FacetRenderer : Node3D
 			return;
 		}
 
-		var textureGroups = new Dictionary<int, List<MapVertex[]>>();
-		foreach (var facet in this.Facets) {
-			foreach (var quadVertices in facet.Quads) {
-				var group = textureGroups.GetValueOrDefault(quadVertices[0].TexturePage);
-				if (group == null) {
-					group = [];
-					textureGroups[quadVertices[0].TexturePage] = group;
-				}
-
-				group.Add(quadVertices);
+		var textureGroups = new Dictionary<int, List<IPoly>>();
+		foreach (var poly in this.Facets) {
+			var group = textureGroups.GetValueOrDefault(poly.GetTexturePage());
+			if (group == null) {
+				group = [];
+				textureGroups[poly.GetTexturePage()] = group;
 			}
+
+			group.Add(poly);
 		}
 
 		foreach (var group in textureGroups) {
-			this.DrawQuadsWithTexture(group.Key, group.Value);
+			this.DrawPolysWithTexture(group.Key, group.Value);
 		}
 	}
 }

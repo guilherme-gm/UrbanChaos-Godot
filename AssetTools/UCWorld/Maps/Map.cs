@@ -1,5 +1,6 @@
 using AssetTools.Structures;
 using AssetTools.UCFileStructures.Maps;
+using AssetTools.UCWorld.Poly;
 using AssetTools.UCWorld.Textures;
 using System.Collections.Generic;
 
@@ -17,7 +18,7 @@ public class UCMap
 
 	public List<FloorFace> FloorFaces { get; set; }
 
-	public List<Facet> Facets { get; set; }
+	public List<IPoly> Facets { get; set; }
 
 	public List<Walkable> Walkables { get; internal set; }
 }
