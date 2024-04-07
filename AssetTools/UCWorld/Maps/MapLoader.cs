@@ -28,7 +28,9 @@ public class MapLoader
 		this.Map.FloorFaces = floorConverter.Convert();
 
 		var facetConverter = new FacetsConverter(this.Map);
-		this.Map.Facets = facetConverter.Convert();
+		facetConverter.Convert();
+		this.Map.Facets = facetConverter.ConvertedFacets;
+		this.Map.Walkables = facetConverter.ConvertedWalkables;
 	}
 
 	public UCMap LoadFomFile(string path) {

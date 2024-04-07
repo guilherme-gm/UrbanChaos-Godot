@@ -18,4 +18,6 @@ public class UCMap
 	public List<FloorFace> FloorFaces { get; set; }
 
 	public List<Facet> Facets { get; set; }
+
+	public List<Walkable> Walkables { get; internal set; }
 }

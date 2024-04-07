@@ -11,6 +11,10 @@ namespace AssetTools.UCWorld.Maps.Converters;
 
 public class FacetsConverter
 {
+	public List<Facet> ConvertedFacets { get; private set; }
+
+	public List<Walkable> ConvertedWalkables { get; private set; }
+
 	private class LoMapWhoCell
 	{
 		public List<DFacet> Facet = [];
@@ -696,9 +700,10 @@ public class FacetsConverter
 		GD.PushWarning("@TODO: Rare facet is skipped.");
 	}
 
-	public List<Facet> Convert() {
+	public void Convert() {
 		this.LoadFacetsFromBuildings();
-		var list = new List<Facet>();
+		var facetsList = new List<Facet>();
+		var walkablesList = new List<Walkable>();
 
 		for (int z = 0; z < Iam.MapLoSize - 1; z++) {
 			for (int x = 0; x < Iam.MapLoSize - 1; x++) {
@@ -725,18 +730,18 @@ public class FacetsConverter
 						if (IsRareFacet(facet)) {
 							ConvertRareFacet(facet, 0);
 						} else {
-							list.Add(new Facet() { Quads = this.ConvertCommonFacet(facet, 0) });
+							facetsList.Add(new Facet() { Quads = this.ConvertCommonFacet(facet, 0) });
 						}
 
 						if (facet.FacetType == FacetType.Normal && building != null) {
-							GD.PushWarning("@TODO: Walkable");
-							// @TODO: FACET_draw_walkable(buildingId);
+							var walkableConverter = new WalkableConverter(this.UCMap);
+							walkablesList.AddRange(walkableConverter.ConvertBuildingWalkables(building));
 						}
 					}
 				}
 			}
 		}
 
-		return list;
+		this.ConvertedFacets = facetsList;
 	}
 }
