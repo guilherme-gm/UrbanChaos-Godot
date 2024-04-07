@@ -10,7 +10,10 @@ public partial class MapRenderer : Node3D
 	private FloorRenderer FloorRenderer { get; set; }
 
 	[Export]
-	private FacetRenderer FacetRenderer { get; set; }
+	private PolyListRenderer FacetRenderer { get; set; }
+
+	[Export]
+	private PolyListRenderer WalkableRenderer { get; set; }
 
 	private string TextureClump { get; set; } = "";
 
@@ -20,6 +23,7 @@ public partial class MapRenderer : Node3D
 		this.Map = map;
 		this.TextureClump = textureClump;
 		this.FloorRenderer.SetFloorFaces(this.TextureClump, this.Map.FloorFaces);
-		this.FacetRenderer.SetFacets(this.TextureClump, this.Map.Facets);
+		this.FacetRenderer.SetPolyList(this.TextureClump, this.Map.Facets);
+		this.WalkableRenderer.SetPolyList(this.TextureClump, this.Map.Walkables);
 	}
 }

@@ -1,6 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://dh3msl56h16np"]
-
-[ext_resource type="Script" path="res://Scenes/Renderers/FacetRenderer.cs" id="1_fjacp"]
-
-[node name="FacetRenderer" type="Node3D"]
-script = ExtResource("1_fjacp")

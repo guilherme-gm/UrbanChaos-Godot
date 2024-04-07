@@ -6,15 +6,15 @@ using System.Collections.Generic;
 namespace AssetTools.Scenes.Renderers;
 
 [Tool]
-public partial class FacetRenderer : Node3D
+public partial class PolyListRenderer : Node3D
 {
 	private string TextureClump { get; set; } = "";
 
-	private List<IPoly> Facets { get; set; }
+	private List<IPoly> PolyList { get; set; }
 
-	public void SetFacets(string textureClump, List<IPoly> facets) {
+	public void SetPolyList(string textureClump, List<IPoly> polyList) {
 		this.TextureClump = textureClump;
-		this.Facets = facets;
+		this.PolyList = polyList;
 		this.Render();
 	}
 
@@ -57,12 +57,12 @@ public partial class FacetRenderer : Node3D
 			child.QueueFree();
 		}
 
-		if (this.Facets == null) {
+		if (this.PolyList == null) {
 			return;
 		}
 
 		var textureGroups = new Dictionary<int, List<IPoly>>();
-		foreach (var poly in this.Facets) {
+		foreach (var poly in this.PolyList) {
 			var group = textureGroups.GetValueOrDefault(poly.GetTexturePage());
 			if (group == null) {
 				group = [];

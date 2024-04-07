@@ -13,7 +13,7 @@ public class FacetsConverter
 {
 	public List<IPoly> ConvertedFacets { get; private set; }
 
-	public List<Walkable> ConvertedWalkables { get; private set; }
+	public List<IPoly> ConvertedWalkables { get; private set; }
 
 	private class LoMapWhoCell
 	{
@@ -589,10 +589,11 @@ public class FacetsConverter
 		return [];
 	}
 
-	public List<IPoly> Convert() {
+	public void Convert() {
 		this.LoadFacetsFromBuildings();
 
 		var facetsList = new List<IPoly>();
+		var walkablesList = new List<IPoly>();
 		for (int z = 0; z < Iam.MapLoSize - 1; z++) {
 			for (int x = 0; x < Iam.MapLoSize - 1; x++) {
 				foreach (var facet in this.LoMapWho[x][z].Facet) {
@@ -623,13 +624,14 @@ public class FacetsConverter
 
 						if (facet.FacetType == FacetType.Normal && building != null) {
 							var walkableConverter = new WalkableConverter(this.UCMap);
-							facetsList.AddRange(walkableConverter.ConvertBuildingWalkables(building));
+							walkablesList.AddRange(walkableConverter.ConvertBuildingWalkables(building));
 						}
 					}
 				}
 			}
 		}
 
-		return facetsList;
+		this.ConvertedFacets = facetsList;
+		this.ConvertedWalkables = walkablesList;
 	}
 }

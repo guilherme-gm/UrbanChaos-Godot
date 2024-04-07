@@ -29,6 +29,7 @@ public class MapLoader
 
 		var facetConverter = new FacetsConverter(this.Map);
 		facetConverter.Convert();
+
 		this.Map.Facets = facetConverter.ConvertedFacets;
 		this.Map.Walkables = facetConverter.ConvertedWalkables;
 	}

@@ -20,5 +20,5 @@ public class UCMap
 
 	public List<IPoly> Facets { get; set; }
 
-	public List<Walkable> Walkables { get; internal set; }
+	public List<IPoly> Walkables { get; internal set; }
 }
