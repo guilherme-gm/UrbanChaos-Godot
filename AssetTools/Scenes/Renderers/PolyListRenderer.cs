@@ -9,6 +9,8 @@ namespace AssetTools.Scenes.Renderers;
 [Tool]
 public partial class PolyListRenderer : Node3D
 {
+	public static int Count = 0;
+
 	private string TextureClump { get; set; } = "";
 
 	private List<IPoly> PolyList { get; set; }
@@ -51,9 +53,12 @@ public partial class PolyListRenderer : Node3D
 			idx += poly.GetVertices().Length;
 		}
 
-		this.AddChild(new MeshInstance3D() {
+		var mesh = new MeshInstance3D() {
 			Mesh = st.Commit(),
-		});
+		};
+		this.AddChild(mesh);
+
+		// _ = ResourceSaver.Save(mesh.Mesh, $"res://test_{Count++}.mesh");
 	}
 
 	private void Render() {

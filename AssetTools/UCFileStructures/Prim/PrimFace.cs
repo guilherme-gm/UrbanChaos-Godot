@@ -19,6 +19,7 @@ public abstract class PrimFace
 
 	public int TexturePage { get; set; }
 
+	// TEXTURE_fix_prim_textures
 	private void FixFacesPart1() {
 		var this_ = this as IPrimFace;
 
@@ -117,6 +118,7 @@ public abstract class PrimFace
 		this_.FaceFlags |= FACE_FIXED;
 	}
 
+	// This is inside _Draw functions
 	private void FixFacesPart2() {
 		var this_ = this as IPrimFace;
 		this.UV = new float[this_.CompressedUV.Length][];
@@ -141,6 +143,7 @@ public abstract class PrimFace
 		this.TexturePage = page;
 	}
 
+	// calc_prim_normals
 	private void CalcNormal(PrimPoint[] points) {
 		var this_ = this as IPrimFace;
 

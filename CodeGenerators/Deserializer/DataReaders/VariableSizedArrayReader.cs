@@ -14,7 +14,7 @@ public class VariableSizedArrayReader : IReader
 
 	public VariableSizedArrayReader(FieldDescriptor descriptor) {
 		this.FieldName = descriptor.Name;
-		this.FieldType = descriptor.FieldType;
+		this.FieldType = descriptor.FieldTypeFullname;
 
 		var attribute = VariableSizedArrayAttribute.FromSymbol(descriptor.FieldSymbol);
 		this.SizeFieldName = attribute.SizePropertyName;
